@@ -16,8 +16,8 @@ export default class ScannerView extends React.Component {
 
   render() {
     return (
-      <div>
-        <button onClick={() => this.scan()}>
+      <div id="scanner-view">
+        <button id="scan-button" onClick={() => this.scan()}>
           {this.state.scanning ? 'Stop' : 'Start'}
         </button>
         <p>
@@ -36,7 +36,7 @@ export default class ScannerView extends React.Component {
 
   onDetected(result) {
     axios
-      .get(`/product/${results.codeResult.code}`)
+      .get(`/product/${result.codeResult.code}`)
       .then(() =>
         this.setState({ code: result.codeResult.code, scanning: false })
       )
