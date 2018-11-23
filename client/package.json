@@ -4,6 +4,8 @@
   "private": true,
   "proxy": "http://localhost:3001",
   "dependencies": {
+    "axios": "^0.18.0",
+    "quagga": "^0.12.1",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-scripts": "1.1.5"
