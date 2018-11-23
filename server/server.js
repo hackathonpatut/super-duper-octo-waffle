@@ -23,7 +23,8 @@ const staticFiles = express.static(path.join(__dirname, '../../client/build'))
 app.use(staticFiles)
 
 const KESKO_PRODUCT_API = 'https://kesko.azure-api.net/v1/search/products';
-const KESKO_PRICE_API = '???';
+const SHOP_CODE = 'C60';
+const KESKO_PRICE_API = `https://kesko.azure-api.net/products/${SHOP_CODE}`;
 
 const headers = {
   'Content-Type': 'application/json',
@@ -53,6 +54,10 @@ const getProductInfo = (ean) => {
   });
 }
 
+const getProductPrice = (ean) => {
+  // TODO: TODO
+}
+
 const parseProductInfo = (info) => {
   const response = {};
   response.name = info.labelName.finnish || info.labelName.english,
@@ -80,6 +85,8 @@ const parseProductInfo = (info) => {
       country: 'N/A',
     }
   }
+
+  response.price = 24.32;
 
   return response;
 }
