@@ -7,16 +7,17 @@ export default class Product extends Component {
     code: null,
     name: null,
     price: null,
-    segment: null,
-  }
+    segment: null
+  };
 
   componentDidMount() {
     const { ean } = this.props;
 
     axios
       .get(`/product/${ean}`)
-      .then((response) => {
-        if (response.data.code == -1) { // 404
+      .then(response => {
+        if (response.data.code == -1) {
+          // 404
           this.setState({ code: -1 });
         } else {
           console.log(response);
@@ -38,12 +39,12 @@ export default class Product extends Component {
       <div>
         <Item.Group>
           <Item>
-            <Item.Image size='tiny' src='http://placehold.it/200x200' />
+            <Item.Image size="tiny" src="http://placehold.it/200x200" />
             <Item.Content>
               <Item.Header>{this.state.name}</Item.Header>
-              <Item.Meta>{ this.state.price} €</Item.Meta>
+              <Item.Meta>{this.state.price} €</Item.Meta>
             </Item.Content>
-        </Item>
+          </Item>
         </Item.Group>
         <p>EAN: {this.props.ean}</p>
       </div>
