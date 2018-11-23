@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import { Icon } from 'semantic-ui-react'
+import { Menu, Icon } from 'semantic-ui-react'
 
 import Scanner from './components/Scanner';
 import Product from './components/Product';
-import './App.css';
 
-const Header = ({ resetEan }) => <header className="header">
-  Otsikko
+const Header = ({ resetEan }) => <Menu fixed='top' inverted>
+  <Menu.Item as='a' header>
+    Super scanner
+  </Menu.Item>
+
   <Icon className="barcode" name='barcode' size='large' color='orange' bordered inverted onClick={resetEan} />
-</header>;
+</Menu>;
 
 class App extends Component {
   state = { ean: null };
@@ -25,7 +27,7 @@ class App extends Component {
     const { ean } = this.state;
 
     return (
-      <div>
+      <div className="App">
         <Header resetEan={this.resetEan} />
         { ean
           ? <Product ean={ean} />

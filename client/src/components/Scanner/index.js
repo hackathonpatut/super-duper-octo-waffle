@@ -12,9 +12,9 @@ export default class Scanner extends React.Component {
         inputStream: {
           type: 'LiveStream',
           constraints: {
-            width: 640,
-            height: 480,
-            facing: 'environment'
+            width: 400,
+            height: 400,
+            facingMode: 'environment'
           }
         },
         locator: {
