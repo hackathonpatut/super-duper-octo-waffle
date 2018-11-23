@@ -1,6 +1,10 @@
 import React from 'react';
 import axios from 'axios';
+import { Button } from 'semantic-ui-react';
+
 import Scanner from './Scanner';
+
+import '../styles/scanner.css';
 
 export default class ScannerView extends React.Component {
   constructor(props) {
@@ -17,9 +21,14 @@ export default class ScannerView extends React.Component {
   render() {
     return (
       <div id="scanner-view">
-        <button id="scan-button" onClick={() => this.scan()}>
-          {this.state.scanning ? 'Stop' : 'Start'}
-        </button>
+        <Button
+          id="scan-button"
+          onClick={() => this.scan()}
+          primary={!this.state.scanning}
+          color={this.state.scanning ? 'red' : ''}
+        >
+          {this.state.scanning ? 'Cancel' : 'Scan code'}
+        </Button>
         <p>
           {this.state.code && this.state.code !== ''
             ? `Code: ${this.state.code}`

@@ -14,7 +14,7 @@ export default class Scanner extends React.Component {
           constraints: {
             width: 640,
             height: 480,
-            facing: 'environment' // or user
+            facing: 'environment'
           }
         },
         locator: {
@@ -23,13 +23,7 @@ export default class Scanner extends React.Component {
         },
         numOfWorkers: 2,
         decoder: {
-          readers: ['ean_reader'],
-          debug: {
-            drawBoundingBox: true,
-            showFrequency: true,
-            drawScanline: true,
-            showPattern: true
-          }
+          readers: ['ean_reader']
         },
         locate: true
       },
