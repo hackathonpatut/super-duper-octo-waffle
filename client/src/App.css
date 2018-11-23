@@ -1,3 +1,8 @@
+.App {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
 #scanner-view {
   text-align: center;
 }
@@ -7,5 +12,21 @@
   margin-bottom: 3rem;
 }
 
+.header {
+  background: #f2711c;
+  height: 60px;
+  line-height: 60px;
+  position: relative;
+  font-size: 20px;
+  padding-left: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+  .header .barcode {
+    position: absolute;
+    right: -3px;
+    top: 0;
+  }
 
 
