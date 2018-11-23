@@ -13,3 +13,11 @@ yarn install
 ```
 yarn start
 ```
+
+### Deployment
+
+Configure Heroku remote origin with Heroku CLI.
+
+```
+git push heroku master
+```
