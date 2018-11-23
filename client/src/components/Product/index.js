@@ -4,15 +4,13 @@ import axios from 'axios';
 export default class Product extends Component {
   state = {
     code: null
-  }
+  };
 
-  componendDidMount() {
+  componentDidMount() {
     const { ean } = this.props;
     axios
       .get(`/product/${ean}`)
-      .then(() =>
-        this.setState({ code: ean })
-      )
+      .then(() => this.setState({ code: ean }))
       .catch(err => {
         console.log(err);
         this.setState({ code: null });
@@ -20,8 +18,6 @@ export default class Product extends Component {
   }
 
   render() {
-    return (
-      <p>EAN: {this.props.ean}</p>
-    );
+    return <p>EAN: {this.props.ean}</p>;
   }
 }
