@@ -95,7 +95,7 @@ const getProductPrice = ean =>
       (error, response, body) => {
         if (error || response.statusCode !== 200) {
           console.log(`${KESKO_PRICE_API}/${SHOP_CODE}/${ean}`);
-          reject(response.body);
+          resolve(JSON.stringify({ pricingUnit: 'N/A', totalPrice: -1 }));
         }
         resolve(body);
       }
@@ -167,20 +167,29 @@ router.get(
       });
     }
 
-    const parsed = parseProductInfo(data.results[0]);
+    const parsed = await parseProductInfo(data.results[0], ean);
 
     if (parsed.segment.id) {
       const matchingRaw = await getMatchingProducts(parsed.segment.id);
       const matching = JSON.parse(matchingRaw);
+
       if (matching.totalHits > 0) {
-        parsed.matching = {
-          sustainability: _.sortBy(
-            matching.results
-              .map(m => parseProductInfo(m, m.ean))
-              .filter(m => m.origin.id !== 'N/A'),
-            'distance'
-          ).slice(0, 5)
-        };
+        await Promise.all(
+          matching.results.map(async m => await parseProductInfo(m, m.ean))
+        )
+          .then(infos => {
+            parsed.matching = {
+              sustainability: _.sortBy(
+                infos.filter(
+                  i => i.price.value !== -1 && i.origin.id !== 'N/A'
+                ),
+                'distance'
+              ).slice(0, 5)
+            };
+          })
+          .catch(err => {
+            console.log(err);
+          });
       }
     }
 
