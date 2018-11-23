@@ -23,8 +23,8 @@ const staticFiles = express.static(path.join(__dirname, '../../client/build'))
 app.use(staticFiles)
 
 const KESKO_PRODUCT_API = 'https://kesko.azure-api.net/v1/search/products';
-const SHOP_CODE = 'C60';
-const KESKO_PRICE_API = `https://kesko.azure-api.net/products/${SHOP_CODE}`;
+const SHOP_CODE = 'C609';
+const KESKO_PRICE_API = `https://kesko.azure-api.net/products`;
 
 const headers = {
   'Content-Type': 'application/json',
@@ -41,24 +41,37 @@ const getProductInfo = (ean) => {
 
   return new Promise((resolve, reject) => {
     request(KESKO_PRODUCT_API, {
-      url: KESKO_PRODUCT_API,
       method: 'POST',
-      headers: headers,
+      headers,
       body,
-    }, function (error, response, body) {
+    }, (error, response, body) => {
       if (error || response.statusCode !== 200) {
-        reject(error.message || 'Request failed!');
+        reject(response.statusMessage);
       }
       resolve(body);
     });
   });
 }
 
-const getProductPrice = (ean) => {
-  // TODO: TODO
-}
+const getProductPrice = (ean) => new Promise((resolve, reject) => {
+  request(`${KESKO_PRICE_API}/${SHOP_CODE}/${ean}`, {
+    method: 'GET',
+    headers,
+  }, (error, response, body) => {
+    if (error || response.statusCode !== 200) {
+      console.log(`${KESKO_PRICE_API}/${SHOP_CODE}/${ean}`);
+      reject(response.body);
+    }
+    resolve(body);
+  });
+});
 
-const parseProductInfo = (info) => {
+const parseProductPrice = (info) => ({
+  unit: info.pricingUnit,
+  value: info.totalPrice,
+});
+
+const parseProductInfo = async (info, ean) => {
   const response = {};
   response.name = info.labelName.finnish || info.labelName.english,
   response.segment = {
@@ -86,9 +99,12 @@ const parseProductInfo = (info) => {
     }
   }
 
-  response.price = 24.32;
+  const priceDataRaw = await getProductPrice(ean);
+  const priceData = parseProductPrice(JSON.parse(priceDataRaw));
 
-  return response;
+  response.price = priceData;
+
+  return Promise.resolve(response);
 }
 
 router.get('/product/:ean',  asyncMiddleware(async (req, res) => {
@@ -109,7 +125,7 @@ router.get('/product/:ean',  asyncMiddleware(async (req, res) => {
     });
   }
 
-  const parsed = parseProductInfo(data.results[0]);
+  const parsed = await parseProductInfo(data.results[0], ean);
 
   return res.json(parsed);
 }));
