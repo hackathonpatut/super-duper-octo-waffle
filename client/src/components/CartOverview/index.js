@@ -17,7 +17,7 @@ export default class CartOverview extends Component {
             <Card.Header>Cart total: <span>12,34 €</span></Card.Header>
           </Card.Content>
           <Card.Content extra>
-              <Button color='standard' icon labelPosition='right'>
+              <Button icon labelPosition='right'>
                 View contents <Icon name='list ol' />
               </Button>
               <Button color='orange' icon labelPosition='right'>
