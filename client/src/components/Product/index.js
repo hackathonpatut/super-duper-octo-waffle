@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Flag, Button, Dimmer, Loader, Divider, Icon, Dropdown } from 'semantic-ui-react';
+import { Flag, Button, Dimmer, Loader, Divider, Icon } from 'semantic-ui-react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import SuggestionList from './SuggestionList';
+import Progress from '../Progress';
 
 class Product extends Component {
   state = {
@@ -85,7 +86,7 @@ class Product extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.match.params.ean && nextProps.match.params.ean && 
+    if (this.props.match.params.ean && nextProps.match.params.ean &&
       nextProps.match.params.ean !== this.props.match.params.ean) {
       this.setState({ code: null });
       this.getData(nextProps.match.params.ean);
@@ -149,31 +150,20 @@ class Product extends Component {
           <p className="product-price">{this.state.price}€</p>
         </div>
         <Divider />
-
-        {
-          /*
-          <Dropdown text='See alternative products' icon='like' floating labeled button className='icon'>
-            <Dropdown.Menu>
-              <Dropdown.Header icon='tree' content='More sustainable' />
-              <Dropdown.Item>Important</Dropdown.Item>
-              <Dropdown.Item>Announcement</Dropdown.Item>
-              <Dropdown.Item>Discussion</Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Header icon='like' content='More healthy' />
-              <Dropdown.Item>Important</Dropdown.Item>
-              <Dropdown.Item>Announcement</Dropdown.Item>
-              <Dropdown.Item>Discussion</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-          */
-        }
-
-        <Button className="check-options" secondary onClick={() => this.toggleAlternatives()}>
+          <div className="progress-wrapper">
+          <div className="progress">
+            <Progress value={80} type='health' />
+          </div>
+          <div className="progress">
+            <Progress value={80} type='green' />
+          </div>
+        </div>
+        <Button style={{ marginTop: '1em' }} className="check-options" basic onClick={() => this.toggleAlternatives()}>
           {`${this.state.isChoicesVisible ? 'Hide' : 'See'} alternative products`}
         </Button>
         {this.state.isChoicesVisible &&
           <React.Fragment>
-            {this.state.sustainabilityChoices && this.state.sustainabilityChoices.length > 0 && 
+            {this.state.sustainabilityChoices && this.state.sustainabilityChoices.length > 0 &&
               <SuggestionList
                 title="Be more sustainable!"
                 data={this.state.sustainabilityChoices}
@@ -181,7 +171,7 @@ class Product extends Component {
                 handleItemClick={this.handleSuggestionClick}
               />
             }
-            {this.state.healthChoices && this.state.healthChoices.length > 0 && 
+            {this.state.healthChoices && this.state.healthChoices.length > 0 &&
               <SuggestionList
                 title="Be more healthy!"
                 data={this.state.healthChoices}
@@ -196,7 +186,7 @@ class Product extends Component {
             <Button icon onClick={() => this.editAmount(-1)}>
               <Icon name='minus' />
             </Button>
-            <Button disabled>{this.state.selectedAmount}</Button>
+            <Button disabled id="remove-this-fokkin-opacity">{this.state.selectedAmount}</Button>
             <Button icon onClick={() => this.editAmount(1)}>
               <Icon name='plus' />
             </Button>

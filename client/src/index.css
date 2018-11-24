@@ -32,6 +32,7 @@ body {
 .cart-overview .ui.card {
   width: 100%;
   border-radius: 0;
+  background: #eaeaea;
 }
 
 .cart-overview .progress {
@@ -56,7 +57,7 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0; 
+  bottom: 0;
 }
 
 /* SUGGESTION LIST */
@@ -129,4 +130,20 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.product-info .progress-wrapper {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.product-info .progress {
+  width: 40%;
+  margin: 0 5%;
+  display: inline-block;
+}
+
+#remove-this-fokkin-opacity {
+  opacity: 0.8 !important;
+  background: #f2f2f2;
 }

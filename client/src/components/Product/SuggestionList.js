@@ -14,7 +14,7 @@ const SuggestionList = ({
         <React.Fragment key={choice.name}>
           <List.Item onClick={() => handleItemClick(choice.ean)} className="suggestion-list-item">
             <div className="suggestion-image">
-              <img style={{ width: 'auto', height: '100%' }} src={`${choice.image || "http://placehold.it/200x200"}`} />
+              <img style={{ width: 'auto', height: '100%' }} src={`${choice.image || "http://placehold.it/200x200"}`} alt='' />
             </div>
             <List.Content style={{ flexGrow: 1, alignSelf: 'center' }}>
               <List.Header as='a' style={{ display: 'flex', justifyContent: 'space-between'}}>
