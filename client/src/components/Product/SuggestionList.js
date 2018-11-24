@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flag, List, Image } from 'semantic-ui-react';
+import { Flag, List } from 'semantic-ui-react';
 
 const SuggestionList = ({
   title,
@@ -8,13 +8,15 @@ const SuggestionList = ({
   handleItemClick,
 }) => (
   <React.Fragment>
-    <h5>{title}</h5>
+    <h4 className="suggestion-title">{title}</h4>
     <List>
       {data.map((choice, ind) => (
         <React.Fragment key={choice.name}>
-          <List.Item onClick={() => handleItemClick(choice.ean)}>
-            <Image className="avatar-image" avatar src={`${choice.image || "http://placehold.it/200x200"}`} />
-            <List.Content style={{ flexGrow: 1 }}>
+          <List.Item onClick={() => handleItemClick(choice.ean)} className="suggestion-list-item">
+            <div className="suggestion-image">
+              <img style={{ width: 'auto', height: '100%' }} src={`${choice.image || "http://placehold.it/200x200"}`} />
+            </div>
+            <List.Content style={{ flexGrow: 1, alignSelf: 'center' }}>
               <List.Header as='a' style={{ display: 'flex', justifyContent: 'space-between'}}>
                 <span>{choice.name}</span>
                 <span style={{color: colorMapper(choice.score), paddingLeft: '10px'}}>{choice.score}</span>
