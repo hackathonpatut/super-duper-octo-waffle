@@ -23,8 +23,8 @@ const staticFiles = express.static(path.join(__dirname, '../../client/build'));
 app.use(staticFiles);
 
 const KESKO_PRODUCT_API = 'https://kesko.azure-api.net/v1/search/products';
-const SHOP_CODE = 'C609';
 const KESKO_PRICE_API = `https://kesko.azure-api.net/products`;
+const SHOP_CODE = 'C609';
 
 const headers = {
   'Content-Type': 'application/json',
@@ -94,7 +94,6 @@ const getProductPrice = ean =>
       },
       (error, response, body) => {
         if (error || response.statusCode !== 200) {
-          console.log(`${KESKO_PRICE_API}/${SHOP_CODE}/${ean}`);
           resolve(JSON.stringify({ pricingUnit: 'N/A', totalPrice: -1 }));
         }
         resolve(body);
@@ -133,6 +132,12 @@ const parseProductInfo = async (info, ean) => {
       id: 'N/A',
       country: 'N/A'
     };
+  }
+
+  if (info.pictureUrls) {
+    response.image = `${info.pictureUrls[0].original}?w=400&fit=clip`;
+  } else {
+    response.image = 'N/A';
   }
 
   if (response.origin.id !== 'N/A') {
