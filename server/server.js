@@ -34,6 +34,22 @@ const headers = {
   'Ocp-Apim-Subscription-Key': process.env.API_KEY
 };
 
+const calculateHealthScore = o => {
+  const weights = {
+    energy: -0.1,
+    sugar: -1,
+    fat: -1,
+    carbohydrates: -1,
+    salt: -1,
+    protein: 1
+  };
+
+  return Object.keys(o.health).reduce(
+    (acc, cur) => acc + weights[cur] * o.health[cur],
+    0
+  );
+};
+
 const getProductInfo = ean => {
   const body = JSON.stringify({
     filters: {
@@ -147,6 +163,34 @@ const parseProductInfo = async (info, ean) => {
     response.distance = distances[response.origin.id];
   }
 
+  response.health = {};
+
+  if (info.attributes.ENERKC) {
+    response.health.energy = info.attributes.ENERKC.value.value;
+  }
+
+  if (info.attributes.SOKERI) {
+    response.health.sugar = info.attributes.SOKERI.value.value;
+  }
+
+  if (info.attributes.SUOLPI) {
+    response.health.salt = info.attributes.SUOLPI.value.value;
+  }
+
+  if (info.attributes.RASVAA) {
+    response.health.fat = info.attributes.RASVAA.value.value;
+  }
+
+  if (info.attributes.PROTEG) {
+    response.health.protein = info.attributes.PROTEG.value.value;
+  }
+
+  if (info.attributes.HIHYDR) {
+    response.health.carbohydrates = info.attributes.HIHYDR.value.value;
+  }
+
+  response.health.score = calculateHealthScore(response);
+
   const priceDataRaw = await getProductPrice(ean);
   const priceData = parseProductPrice(JSON.parse(priceDataRaw));
 
@@ -192,6 +236,12 @@ router.get(
                   i => i.price.value !== -1 && i.origin.id !== 'N/A'
                 ),
                 'distance'
+              ).slice(0, 5),
+
+              health: _.orderBy(
+                infos.filter(i => i.price.value !== -1),
+                'health.score',
+                'desc'
               ).slice(0, 5)
             };
           })
