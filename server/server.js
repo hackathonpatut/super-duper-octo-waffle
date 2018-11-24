@@ -6,7 +6,15 @@ import request from 'request';
 import _ from 'lodash';
 
 import distances from './distances';
+
+import { getRedisClient } from './redis';
+
 require('dotenv').config();
+
+const REDIS_URL = process.env.REDIS_URL ?
+  process.env.REDIS_URL : 'http://localhost:6379';
+
+const cache = getRedisClient(REDIS_URL);
 
 const client = new Client()
 
@@ -231,6 +239,7 @@ const parseProductInfo = async (info, ean) => {
 
 router.get(
   '/product/:ean',
+  cache.route(),
   asyncMiddleware(async (req, res) => {
     const ean = req.params.ean;
     if (!ean || ean.length !== 13) {
@@ -310,7 +319,7 @@ const getScore = async function(ean) {
 }
 
 
-app.post('/cart-comparison', (req, res) => {
+app.post('/cart-comparison', cache.route(), (req, res) => {
   client.connect();
   const j={'name':'binchen'};
   const k = JSON.stringify(j); // '{"name":"binchen"}'
@@ -322,8 +331,6 @@ app.post('/cart-comparison', (req, res) => {
     console.log(result)
   })
   console.log(typeof(eans));
-
-
 
 
   client.query('SELECT * FROM Baskets limit 100;', (error, result) => {
@@ -353,12 +360,14 @@ app.post('/cart-comparison', (req, res) => {
   heath-ranki
 }
 */
-router.get('/cart-comparison', (err, res) => {
-  client.connect();
-  client.query('SELECT COUNT(*) FROM Products;', (error, result) => {
-    console.log(error ? error.stack : result) // Hello World!
-    client.end()
-  })
+router.get('/cart-comparison',
+  cache.route(),
+  (err, res) => {
+    client.connect();
+    client.query('SELECT COUNT(*) FROM Products;', (error, result) => {
+      console.log(error ? error.stack : result) // Hello World!
+      client.end()
+    })
 
 /*
   await client.query(
