@@ -153,10 +153,10 @@ const parseProductInfo = async (info, ean) => {
     };
   }
 
-  if (info.pictureUrls && info.pictureUrls.length > 0) {
-    response.image = `${info.pictureUrls[0].original}?w=400&fit=clip`;
+  if (info.pictureUrls && info.pictureUrls[0] && info.pictureUrls[0].original) {
+    response.image = `${info.pictureUrls[0].original}?h=300&fit=clip`;
   } else {
-    response.image = 'N/A';
+    response.image = null;
   }
 
   if (response.origin.id !== 'N/A') {

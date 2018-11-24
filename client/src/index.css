@@ -10,6 +10,10 @@ body {
   position: relative;
 }
 
+#interactive {
+  margin-top: 84px;
+}
+
 #scanner-view {
   text-align: center;
 }
@@ -19,3 +23,10 @@ body {
   margin-bottom: 3rem;
 }
 
+.product-card {
+  margin-top: 84px;
+}
+
+.product-card > .ui.card {
+  margin: auto;
+}

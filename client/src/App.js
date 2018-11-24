@@ -13,7 +13,8 @@ const Header = ({ resetEan }) => <Menu fixed='top' inverted>
 </Menu>;
 
 class App extends Component {
-  state = { ean: null };
+  // state = { ean: null };
+  state = { ean: 6420256014004 }
 
   changeEan = (result) => {
     this.setState({ ean: result.codeResult.code });

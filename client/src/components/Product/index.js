@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Item } from 'semantic-ui-react';
+import { Item, Card, Image, Dimmer, Loader } from 'semantic-ui-react';
 import axios from 'axios';
 
 export default class Product extends Component {
@@ -12,6 +12,7 @@ export default class Product extends Component {
 
   componentDidMount() {
     const { ean } = this.props;
+    
 
     axios
       .get(`/product/${ean}`)
@@ -21,8 +22,8 @@ export default class Product extends Component {
           this.setState({ code: -1 });
         } else {
           console.log(response);
-          const { name, price, segment } = response.data;
-          this.setState({ code: ean, name, price: price.value });
+          const { name, price, segment, image } = response.data;
+          this.setState({ code: ean, name, price: price.value, image });
         }
       })
       .catch(err => {
@@ -33,20 +34,40 @@ export default class Product extends Component {
 
   render() {
     if (this.state.code === -1) return <p>Tuotetta ei löytynyt</p>;
-    if (this.state.code === null) return <p>Ladataan...</p>;
+    if (this.state.code === null) return (
+      <div className="product-card">
+        <Card>
+          <div style={{minHeight: '300px'}}>
+            <Dimmer active inverted>
+              <Loader>Ladataan...</Loader>
+            </Dimmer>
+          </div>
+          <Card.Content>
+            <Card.Header>Ladataan...</Card.Header>
+          </Card.Content>
+        </Card>
+      </div>
+    );
 
     return (
-      <div>
-        <Item.Group>
-          <Item>
-            <Item.Image size="tiny" src="http://placehold.it/200x200" />
-            <Item.Content>
-              <Item.Header>{this.state.name}</Item.Header>
-              <Item.Meta>{this.state.price} €</Item.Meta>
-            </Item.Content>
-          </Item>
-        </Item.Group>
-        <p>EAN: {this.props.ean}</p>
+      <div className="product-card">
+        <Card>
+          <Image src={`${this.state.image || "http://placehold.it/200x200"}`} />
+          <Card.Content>
+            <Card.Header>{this.state.name}</Card.Header>
+            <Card.Meta>
+              <span>{`EAN: ${this.props.ean}` || 'EAN: XXX'}</span>
+            </Card.Meta>
+            <Card.Description>
+              <div>
+                Sustainability
+              </div>
+            </Card.Description>
+          </Card.Content>
+          <Card.Content extra>
+            {this.state.price} €
+          </Card.Content>
+        </Card>
       </div>
     );
   }
