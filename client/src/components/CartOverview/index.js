@@ -5,7 +5,7 @@ import Progress from '../Progress';
 export default class CartOverview extends Component {
   render() {
 
-    const { items } = this.props;
+    const { items, goToCart } = this.props;
     const totalPrice = items.reduce((p, v) => p + v.amount * v.price, 0).toFixed(2);
 
     return (
@@ -21,10 +21,10 @@ export default class CartOverview extends Component {
             <Card.Header>Cart total: <span>{totalPrice}€</span></Card.Header>
           </Card.Content>
           <Card.Content extra>
-              <Button icon labelPosition='right'>
+              <Button icon labelPosition='right' onClick={goToCart}>
                 View contents <Icon name='list ol' />
               </Button>
-              <Button color='orange' icon labelPosition='right'>
+              <Button color='orange' icon labelPosition='right' onClick={goToCart}>
                 Payment <Icon name='right arrow' />
               </Button>
           </Card.Content>
