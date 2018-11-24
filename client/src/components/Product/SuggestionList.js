@@ -18,14 +18,16 @@ const SuggestionList = ({
               <img style={{ width: 'auto', height: '100%' }} src={`${choice.image || "http://placehold.it/200x200"}`} alt='' />
             </div>
             <List.Content style={{ flexGrow: 1, alignSelf: 'center' }}>
-              <List.Header as='a' style={{ display: 'block' }}>
+              <List.Header as='a' style={{ display: 'flex', flexDirecton: 'row', justifyContent: 'space-between' }}>
                 <span>{choice.name}</span>
-                <span style={{ paddingLeft: 10, width: 30, float: 'right' }}>
-                  <Progress value={Math.round(choice.sustainabilityScore * 100)} hideText={true} type='sustainability' />
-                </span>
-                <span style={{ paddingLeft: 10, width: 30, float: 'right' }}>
-                  <Progress value={Math.round(choice.healthScore * 100)} hideText={true} type='health' />
-                </span>
+                <div style={{ display: 'flex' }}>
+                  <span style={{ paddingLeft: 10, width: 30 }}>
+                    <Progress value={Math.round(choice.healthScore * 100)} hideText={true} type='health' />
+                  </span>
+                  <span style={{ paddingLeft: 10, width: 30 }}>
+                    <Progress value={Math.round(choice.sustainabilityScore * 100)} hideText={true} type='sustainability' />
+                  </span>
+                </div>
               </List.Header>
               <List.Description>
                 <span className="choiceInfo">
