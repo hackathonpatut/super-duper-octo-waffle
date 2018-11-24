@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import CircularProgressbar from 'react-circular-progressbar';
 
-import 'react-circular-progressbar/dist/styles.css';
-
 export default class Progress extends Component {
   render() {
     const { value, type } = this.props;
