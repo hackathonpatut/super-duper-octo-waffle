@@ -10,7 +10,7 @@ export default class Product extends Component {
     segment: null
   };
 
-  componentDidMount() {
+  componentWillReceiveProps() {
     const { ean } = this.props;
 
     axios

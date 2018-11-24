@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Menu, Icon } from 'semantic-ui-react'
+import { Menu, Icon, Button } from 'semantic-ui-react'
 
 import Scanner from './components/Scanner';
 import Product from './components/Product';
@@ -33,6 +33,11 @@ class App extends Component {
           ? <Product ean={ean} />
           : <Scanner onDetected={this.changeEan} />
         }
+        <div style={{ marginTop: 500 }}>
+          <Button onClick={() => this.changeEan({ codeResult: { code: '8717775818090' }})}>ES</Button>
+          <Button onClick={() => this.changeEan({ codeResult: { code: '6410405060457' }})}>Tomaatti</Button>
+          <Button onClick={() => this.changeEan({ codeResult: { code: '6420256014004' }})}>Purkka</Button>
+        </div>
       </div>
     );
   }
