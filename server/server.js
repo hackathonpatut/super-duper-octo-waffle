@@ -1,3 +1,4 @@
+import { Client } from 'pg';
 import bodyParser from 'body-parser';
 import express from 'express';
 import path from 'path';
@@ -5,8 +6,9 @@ import request from 'request';
 import _ from 'lodash';
 
 import distances from './distances';
-
 require('dotenv').config();
+
+const client = new Client()
 
 const app = express();
 
@@ -287,6 +289,103 @@ router.get(
   })
 );
 
+const getScore = async function(ean) {
+  const res = await client.query(
+  `SELECT health, sustainability FROM products WHERE ean = '` + ean + `';`);
+  // If ean is not found, return median value
+  if (res.rowCount == 0) {
+    return {
+      'health': 19.7,
+      'sustainability': 433
+    }
+  } else {
+    const scores =  _.map(res.rows, o => {
+      return ({
+        'health': scaleHealth(parseFloat(o.health)),
+        'sustainability': scaleSustainability(parseFloat(o.sustainability))
+      });
+    });
+    return scores[0]
+  }
+}
+
+
+app.post('/cart-comparison', (req, res) => {
+  client.connect();
+  const j={'name':'binchen'};
+  const k = JSON.stringify(j); // '{"name":"binchen"}'
+  console.log(req.body);
+  const eans = req.body.eans;
+
+  getScore(eans[0]).then(result => {
+    console.log("mooikka moi")
+    console.log(result)
+  })
+  console.log(typeof(eans));
+
+
+
+
+  client.query('SELECT * FROM Baskets limit 100;', (error, result) => {
+    //console.log(error ? error.stack : result) // Hello World!
+    var healths = _.map(result.rows, o => {
+      return scaleHealth(parseFloat(o.health))
+    });
+    healths = healths.sort()
+    //console.log(healths);
+    client.end();
+  })
+
+  const dummy_res = {
+    'health': 0.75,
+    'sustainability': 0.6
+  }
+
+  res.send(JSON.stringify(dummy_res))
+
+  //res.send(JSON.stringify(req.body));
+});
+
+/*
+{
+  sustainability-ranking: 0.25
+  sustainability-score: 0.25
+  heath-ranki
+}
+*/
+router.get('/cart-comparison', (err, res) => {
+  client.connect();
+  client.query('SELECT COUNT(*) FROM Products;', (error, result) => {
+    console.log(error ? error.stack : result) // Hello World!
+    client.end()
+  })
+
+/*
+  await client.query(
+    'SELECT COUNT(*) FROM Products;'
+  );
+  */
+/*
+  client.query('SELECT COUNT(*) FROM Products;', (err, res) => {
+
+  console.log(err ? err.stack : res.rows[0].message) // Hello World!
+})*/
+  res.send('res');
+});
+
+
+/*
+const res = await client.query(
+  'SELECT COUNT(*) FROM Products;''
+);
+
+
+client.connect()
+client.query('COUNT (*) FROM Products', (err, res) => {
+  console.log(err ? err.stack : res) // Hello World!
+  client.end()
+})
+*/
 app.use(router);
 
 app.use('/*', staticFiles);
