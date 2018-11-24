@@ -200,3 +200,15 @@ body {
 .review-info {
   padding: 20px;
 }
+
+.info-button {
+  width: 100%;
+}
+
+.info-button > button {
+  width: 100%;
+}
+
+.info-button .icon {
+  margin: 0 !important;
+}

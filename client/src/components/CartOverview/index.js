@@ -15,7 +15,7 @@ export default withRouter(class CartOverview extends Component {
 
   render() {
 
-    const { items, goToCart, location } = this.props;
+    const { items, location } = this.props;
     const totalPrice = items.reduce((p, v) => p + v.amount * v.price, 0).toFixed(2);
 
     const isCart = location.pathname === '/cart';

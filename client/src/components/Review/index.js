@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Divider } from 'semantic-ui-react';
+import { List, Divider, Button, Label, Icon, Popup } from 'semantic-ui-react';
 import Progress from '../Progress';
 
 export default class Review extends Component {
@@ -44,6 +44,17 @@ export default class Review extends Component {
           </List.Item>
         </List>
         <Divider />
+        <Popup trigger={
+          <Button as='div' labelPosition='right' className="info-button">
+            <Button color='blue'>
+              Learn more about healthy choices
+            </Button>
+            <Label as='a' basic color='blue' pointing='left'>
+            <Icon name='heart'/>
+            </Label>
+          </Button>
+        } content="How about buying less soft drinks?" />
+        <Divider />
         <h2>SUSTAINABILITY</h2>
         <div style={{ width: '35%', margin: '1em auto' }}>
           <Progress value={40} />
@@ -70,6 +81,17 @@ export default class Review extends Component {
             </List.Content>
           </List.Item>
         </List>
+        <Divider />
+        <Popup trigger={
+          <Button as='div' labelPosition='right' className="info-button">
+            <Button color='green'>
+              Learn more about sustainable choices
+            </Button>
+            <Label as='a' basic color='green' pointing='left'>
+            <Icon name='tree'/>
+            </Label>
+          </Button>
+        } content="Buy locally produced goods!" />
       </div>
     );
   }
