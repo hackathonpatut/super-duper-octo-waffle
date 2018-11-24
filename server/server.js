@@ -159,8 +159,20 @@ const parseProductInfo = async (info, ean) => {
     response.image = null;
   }
 
+  response.sustainability = {};
   if (response.origin.id !== 'N/A') {
-    response.distance = distances[response.origin.id];
+    response.sustainability.distance = distances[response.origin.id];
+
+    if (info.attributes.TX_YMPMER && info.attributes.TX_YMPMER.value) {
+      response.sustainability.marks = Object.keys(
+        info.attributes.TX_YMPMER.value
+      ).length;
+      response.sustainability.score =
+        (1 / response.sustainability.marks) * response.sustainability.distance;
+    } else {
+      response.sustainability.marks = 0;
+      response.sustainability.score = response.sustainability.distance;
+    }
   }
 
   response.health = {};
@@ -235,7 +247,7 @@ router.get(
                 infos.filter(
                   i => i.price.value !== -1 && i.origin.id !== 'N/A'
                 ),
-                'distance'
+                'sustainability.score'
               ).slice(0, 5),
 
               health: _.orderBy(
