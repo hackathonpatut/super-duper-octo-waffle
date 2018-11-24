@@ -194,5 +194,9 @@ body {
 }
 
 .page {
-  padding-bottom: 200px;
+  padding-bottom: 200px !important;
+}
+
+.review-info {
+  padding: 20px;
 }

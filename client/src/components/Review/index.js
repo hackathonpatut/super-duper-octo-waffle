@@ -6,7 +6,7 @@ export default class Review extends Component {
   render() {
 
     return (
-      <div style={{ padding: 10 }} className="page">
+      <div className="review-info page">
         <h2>HEALTH</h2>
         <div style={{ width: '35%', margin: '1em auto' }}>
           <Progress value={60} type="health" />
