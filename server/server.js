@@ -300,9 +300,7 @@ router.get(
   })
 );
 
-
 const getStats = async function(basketScores) {
-
   const client = new Client()
   client.connect();
   const scores = await client.query('SELECT * FROM Baskets limit 100;');
@@ -337,49 +335,8 @@ app.post('/cart-comparison', cache.route(), (req, res) => {
   getStats(basketScores).then(scores => {
     res.send(JSON.stringify(scores))
   });
-
-  //res.send(JSON.stringify(req.body));
 });
 
-/*
-{
-  sustainability-ranking: 0.25
-  sustainability-score: 0.25
-  heath-ranki
-}
-*/
-router.get('/cart-comparison', cache.route(), (err, res) => {
-  client.connect();
-  client.query('SELECT COUNT(*) FROM Products;', (error, result) => {
-    console.log(error ? error.stack : result); // Hello World!
-    client.end();
-  });
-
-  /*
-  await client.query(
-    'SELECT COUNT(*) FROM Products;'
-  );
-  */
-  /*
-  client.query('SELECT COUNT(*) FROM Products;', (err, res) => {
-
-  console.log(err ? err.stack : res.rows[0].message) // Hello World!
-})*/
-  res.send('res');
-});
-
-/*
-const res = await client.query(
-  'SELECT COUNT(*) FROM Products;''
-);
-
-
-client.connect()
-client.query('COUNT (*) FROM Products', (err, res) => {
-  console.log(err ? err.stack : res) // Hello World!
-  client.end()
-})
-*/
 app.use(router);
 
 app.use('/*', staticFiles);
