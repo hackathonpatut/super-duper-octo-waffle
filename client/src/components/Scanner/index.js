@@ -38,6 +38,7 @@ export default class Scanner extends React.Component {
   }
 
   componentWillUnmount() {
+    window.navigator.vibrate(200);
     Quagga.offDetected(this.props.onDetected);
   }
 }
