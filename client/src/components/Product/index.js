@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Card, Image, Dimmer, Loader, Statistic, Divider } from 'semantic-ui-react';
+import { List, Card, Image, Button, Dimmer, Loader, Statistic, Divider } from 'semantic-ui-react';
 import axios from 'axios';
 
 export default class Product extends Component {
@@ -15,7 +15,7 @@ export default class Product extends Component {
 
   componentDidMount() {
     const { ean } = this.props;
-    
+
 
     axios
       .get(`/product/${ean}`)
@@ -47,6 +47,13 @@ export default class Product extends Component {
     if (score < 30) return 'red';
     if (score < 80) return 'orange';
     return 'green';
+  }
+
+  addToCart = () => {
+    this.props.addToCart({
+      name: this.state.name,
+      price: this.state.price,
+    });
   }
 
   render() {
@@ -113,6 +120,7 @@ export default class Product extends Component {
             </Card.Description>
           </Card.Content>
         </Card>
+        <Button onClick={this.addToCart}>Lisää koriin</Button>
       </div>
     );
   }
