@@ -1,9 +1,22 @@
 import React, { Component } from 'react';
-import { List, Divider, Button, Label, Icon, Popup } from 'semantic-ui-react';
+import { List, Divider, Button, Label, Icon, Popup, Loader } from 'semantic-ui-react';
 import Progress from '../Progress';
 
 export default class Review extends Component {
+  state = { isMobilePay: true }
+
+  componentDidMount() {
+    window.setTimeout(() => this.setState({ isMobilePay: false }), 5000);
+  }
+
   render() {
+    // Fuckkin mobile pay API documentation was lacking so we improvised
+    if (this.state.isMobilePay) {
+      return <div style={{ background: '#5b7cf7', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999, fontSize: 24, color: '#fff', paddingTop: '45%', fontWeight: 'bold', textAlign: 'center', lineHeight: 1.618 }}>
+        MobilePay<br/>payment going...
+        <Loader active inverted size='large' />
+      </div>;
+    }
 
     return (
       <div className="review-info page">
