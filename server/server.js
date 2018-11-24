@@ -4,7 +4,7 @@ import path from 'path';
 import request from 'request';
 import _ from 'lodash';
 
-import distances from './distances.json';
+import distances from './distances';
 
 require('dotenv').config();
 
