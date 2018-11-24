@@ -147,3 +147,10 @@ body {
   opacity: 0.8 !important;
   background: #f2f2f2;
 }
+
+/* CART VIEW */
+.cart-info {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}

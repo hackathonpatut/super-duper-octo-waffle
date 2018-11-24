@@ -17,6 +17,7 @@ class Product extends Component {
       name: null,
       id: null,
     },
+    image: null,
     sustainabilityChoices: [],
     healthChoices: [],
     isChoicesVisible: false,
@@ -98,6 +99,7 @@ class Product extends Component {
       amount: this.state.selectedAmount,
       name: this.state.name,
       price: this.state.price,
+      image: this.state.image,
     });
   }
 

@@ -22,13 +22,11 @@ const Header = () => <Menu fixed='top' inverted>
 
 class App extends Component {
   state = {
-    // {amount: number, name: string, price: number}
     cart: [],
   };
 
   changeEan = (result) => {
     const ean = result.codeResult.code;
-
     if (!ean || ean.startsWith('0')) {
       console.log('Invalid EAN!')
     } else {
@@ -46,7 +44,24 @@ class App extends Component {
 
     const without = this.state.cart.filter(o => o.name !== newProd.name);
     this.setState({ cart: without.concat(productToAdd) });
-    
+  }
+
+  removeUnitFromCart = (name) => {
+    const existingProduct = _.find(this.state.cart, o => o.name === name);
+    console.log(existingProduct);
+    if (existingProduct) {
+      if (existingProduct.amount === 1) {
+        const without = this.state.cart.filter(o => o.name !== name);
+        this.setState({ cart: without});
+      } else {
+        const newProduct = {
+          ...existingProduct,
+          amount: existingProduct.amount -1,
+        }
+        const without = this.state.cart.filter(o => o.name !== name);
+        this.setState({ cart: without.concat(newProduct) });
+      }
+    }
   }
 
   handleSuggestionClick = (ean) => {
@@ -66,6 +81,7 @@ class App extends Component {
               <Cart
                 items={this.state.cart}
                 closeList={this.closeList}
+                removeUnitFromCart={this.removeUnitFromCart}
               />
             }
           />
