@@ -153,6 +153,8 @@ const parseProductInfo = async (info, ean) => {
     };
   }
 
+  response.ean = info.ean;
+
   if (info.pictureUrls && info.pictureUrls[0] && info.pictureUrls[0].original) {
     response.image = `${info.pictureUrls[0].original}?h=300&fit=clip`;
   } else {

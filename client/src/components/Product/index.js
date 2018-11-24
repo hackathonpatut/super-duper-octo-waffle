@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { List, Card, Image, Dimmer, Loader, Statistic, Divider } from 'semantic-ui-react';
+import { Button, Card, Image, Dimmer, Loader, Statistic, Divider } from 'semantic-ui-react';
 import axios from 'axios';
+import SuggestionList from './SuggestionList';
 
 export default class Product extends Component {
   state = {
@@ -8,15 +9,17 @@ export default class Product extends Component {
     name: null,
     price: null,
     segment: null,
-    sustainability: 10,
-    health: 60,
+    sustainability: null,
+    health: null,
+    country: {
+      name: null,
+      id: null,
+    },
     sustainabilityChoices: [],
+    healthChoices: [],
   };
 
-  componentDidMount() {
-    const { ean } = this.props;
-    
-
+  getData = (ean) => {
     axios
       .get(`/product/${ean}`)
       .then(response => {
@@ -25,16 +28,43 @@ export default class Product extends Component {
           this.setState({ code: -1 });
         } else {
           console.log(response);
-          const { name, price, segment, image, matching, origin } = response.data;
+          const { name, price, image, matching, origin, distance, health } = response.data;
 
           const sustainabilityChoices = matching.sustainability.map(product => ({
+            ean: product.ean,
             name: product.name,
             image: product.image,
-            country: product.origin.country,
+            country: {
+              name: product.origin.country,
+              id: product.origin.id,
+            },
             price: product.price.value,
-          })).slice(0, Math.min(matching.sustainability.length, 3));
+            score: product.distance, // FIXME:
+          })).filter(p => p.ean !== ean).slice(0, Math.min(matching.sustainability.length, 3));
 
-          this.setState({ code: ean, name, price: price.value, image, sustainabilityChoices, country: origin.country });
+          const healthChoices = matching.health.map(product => ({
+            ean: product.ean,
+            name: product.name,
+            image: product.image,
+            country: {
+              name: product.origin.country,
+              id: product.origin.id,
+            },
+            price: product.price.value,
+            score: product.health.score, // FIXME:
+          })).filter(p => p.ean !== ean).slice(0, Math.min(matching.health.length, 3));
+
+          this.setState({
+            code: ean,
+            name,
+            price: price.value,
+            image,
+            sustainabilityChoices,
+            healthChoices,
+            country: origin.country,
+            sustainability: distance,
+            health: health.score,
+          });
         }
       })
       .catch(err => {
@@ -43,10 +73,39 @@ export default class Product extends Component {
       });
   }
 
-  scoreToColor = (score) => {
-    if (score < 30) return 'red';
-    if (score < 80) return 'orange';
+  componentDidMount() {
+    const { ean } = this.props;
+    this.getData(ean);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.ean !== this.props.ean) {
+      this.setState({ code: null });
+      this.getData(nextProps.ean);
+    }
+  }
+
+  addToCart = () => {
+    this.props.addToCart({
+      name: this.state.name,
+      price: this.state.price,
+    });
+  }
+
+  healthToColor = (score) => {
+    if (score < -100) return 'red';
+    if (score < -50) return 'orange';
     return 'green';
+  }
+
+  distanceToColor = (score) => {
+    if (score < 300) return 'green';
+    if (score < 1000) return 'orange';
+    return 'red';
+  }
+
+  handleSuggestionClick = (ean) => {
+    this.props.handleSuggestionClick(ean);
   }
 
   render() {
@@ -81,38 +140,33 @@ export default class Product extends Component {
             </Card.Meta>
             <Card.Description>
               <Statistic.Group size="small">
-                <Statistic color={this.scoreToColor(this.state.sustainability)}>
+                <Statistic color={this.distanceToColor(this.state.sustainability)}>
                   <Statistic.Value>{this.state.sustainability}</Statistic.Value>
                   <Statistic.Label>Sustainability</Statistic.Label>
                 </Statistic>
-                <Statistic color={this.scoreToColor(this.state.health)}>
+                <Statistic color={this.healthToColor(this.state.health)}>
                   <Statistic.Value>{this.state.health}</Statistic.Value>
                   <Statistic.Label>Health</Statistic.Label>
                 </Statistic>
               </Statistic.Group>
               <Divider />
-              <h5>Be more sustainable!</h5>
-              <List>
-                {this.state.sustainabilityChoices.map((choice, ind) => (
-                  <React.Fragment key={choice.name}>
-                    <List.Item>
-                      <Image className="avatar-image" avatar src={`${choice.image || "http://placehold.it/200x200"}`} />
-                      <List.Content style={{ flexGrow: 1 }}>
-                        <List.Header as='a' style={{ display: 'flex', justifyContent: 'space-between'}}>
-                          <span>{choice.name}</span>
-                          <span style={{color: this.scoreToColor(24), paddingLeft: '10px'}}>24</span>
-                        </List.Header>
-                        <List.Description>
-                          <span className="choiceInfo">{`Origin: ${choice.country}, price: ${choice.price} €`}</span>
-                        </List.Description>
-                      </List.Content>
-                    </List.Item>
-                  </React.Fragment>
-                ))}
-              </List>
+              <SuggestionList
+                title="Be more sustainable!"
+                data={this.state.sustainabilityChoices}
+                colorMapper={this.distanceToColor}
+                handleItemClick={this.handleSuggestionClick}
+              />
+              <Divider />
+              <SuggestionList
+                title="Be more healthy!"
+                data={this.state.healthChoices}
+                colorMapper={this.healthToColor}
+                handleItemClick={this.handleSuggestionClick}
+              />
             </Card.Description>
           </Card.Content>
         </Card>
+        <Button onClick={this.addToCart}>Lisää koriin</Button>
       </div>
     );
   }
