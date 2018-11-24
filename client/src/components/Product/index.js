@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Image, Dimmer, Loader, Statistic, Divider } from 'semantic-ui-react';
+import { Button, Card, Image, Dimmer, Loader, Statistic, Divider } from 'semantic-ui-react';
 import axios from 'axios';
 import SuggestionList from './SuggestionList';
 
