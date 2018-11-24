@@ -18,14 +18,14 @@ export default class Scanner extends React.Component {
           }
         },
         locator: {
-          patchSize: 'medium',
+          patchSize: 'large',
           halfSample: true
         },
         numOfWorkers: 2,
         decoder: {
           readers: ['ean_reader']
         },
-        locate: true
+        locate: false
       },
       function(err) {
         if (err) {
