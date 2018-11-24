@@ -6,7 +6,6 @@ body {
 
 #root {
   max-width: 400px;
-  margin: 0 auto;
   position: relative;
 }
 
@@ -29,4 +28,21 @@ body {
 
 .product-card > .ui.card {
   margin: auto;
+  width: inherit;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+}
+
+.product-card > .ui.card > .content {
+  margin-top: 10px;
+}
+
+.infotext {
+  display: flex;
+  justify-content: space-between;
+}
+
+.statistics {
+  justify-content: space-around;
 }
