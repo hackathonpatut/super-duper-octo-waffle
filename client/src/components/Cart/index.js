@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
-import { Button, Image, List } from 'semantic-ui-react'
+import _ from 'lodash';
+import { Button, List } from 'semantic-ui-react'
 
 export default class Cart extends Component {
   render() {
-    const { items, removeUnitFromCart } = this.props;
+    const { items, removeUnitFromCart, handleItemClick } = this.props;
 
     if (items.length < 1) return <p>Empty list</p>;
+
+    const sortedList = _.sortBy(items, 'name');
 
     return (
       <div className="cart-info">
         <List divided verticalAlign='middle'>
-          {items.map(item => (
+          {sortedList.map(item => (
             <List.Item key={item.name} className="suggestion-list-item" style={{ paddingTop: '10px', paddingBottom: '10px' }}>
                <div className="suggestion-image" style={{ alignSelf: 'center' }}>
                 <img style={{ width: 'auto', height: '100%' }} src={`${item.image || "http://placehold.it/200x200"}`} />
@@ -18,7 +21,7 @@ export default class Cart extends Component {
               <div style={{ fontSize: '16px', alignSelf: 'center', marginRight: '20px' }}>
                 X{item.amount}
               </div>
-              <List.Content style={{ flexGrow: 1, alignSelf: 'center' }}>
+              <List.Content onClick={() => handleItemClick(item.ean)} style={{ flexGrow: 1, alignSelf: 'center' }}>
                 <List.Header as='a' style={{ display: 'flex', justifyContent: 'space-between'}}>
                   <span>{item.name}</span>
                 </List.Header>
@@ -27,7 +30,7 @@ export default class Cart extends Component {
                 </List.Description>
               </List.Content>
               <List.Content floated='right' style={{ alignSelf: 'center' }}>
-                <Button onClick={() => removeUnitFromCart(item.name)}>Remove 1</Button>
+                <Button onClick={() => removeUnitFromCart(item.name)}>Remove</Button>
               </List.Content>
             </List.Item>
           ))}

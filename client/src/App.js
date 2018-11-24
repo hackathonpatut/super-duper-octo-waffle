@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { Menu, Icon, Button } from 'semantic-ui-react'
+import { Menu, Icon } from 'semantic-ui-react'
 import { Route, Switch, withRouter, Link } from 'react-router-dom';
 
 import Scanner from './components/Scanner';
@@ -22,6 +22,7 @@ const Header = () => <Menu fixed='top' inverted>
 
 class App extends Component {
   state = {
+    // {amount: number, name: string, price: number}
     cart: [],
   };
 
@@ -48,7 +49,6 @@ class App extends Component {
 
   removeUnitFromCart = (name) => {
     const existingProduct = _.find(this.state.cart, o => o.name === name);
-    console.log(existingProduct);
     if (existingProduct) {
       if (existingProduct.amount === 1) {
         const without = this.state.cart.filter(o => o.name !== name);
@@ -82,6 +82,7 @@ class App extends Component {
                 items={this.state.cart}
                 closeList={this.closeList}
                 removeUnitFromCart={this.removeUnitFromCart}
+                handleItemClick={this.handleSuggestionClick}
               />
             }
           />
@@ -90,13 +91,16 @@ class App extends Component {
             () =>
               <Product
                 addToCart={this.addToCart}
+                items={this.state.cart}
                 handleSuggestionClick={this.handleSuggestionClick}
               />
             }
           />
         </Switch>
         {this.props.location.pathname !== '/cart' &&
-          <CartOverview />
+          <CartOverview
+            items={this.state.cart}
+          />
         }
       </div>
     );

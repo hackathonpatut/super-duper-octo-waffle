@@ -100,6 +100,7 @@ class Product extends Component {
       name: this.state.name,
       price: this.state.price,
       image: this.state.image,
+      ean: this.state.code,
     });
   }
 
@@ -139,6 +140,10 @@ class Product extends Component {
         </Dimmer>
       </div>
     );
+
+    const currentCart = this.props.items;
+    const currentItem = currentCart.find(p => p.name === this.state.name);
+    const currentCount = currentItem ? currentItem.amount : 0;
 
     return (
       <div className="product-info">
@@ -195,7 +200,7 @@ class Product extends Component {
             </Button>
           </Button.Group>
           <Button className="add-cart" primary icon labelPosition='right' onClick={() => this.addToCart()}>
-            Add to cart
+            {`Add to cart${currentCount !== 0 ? ` (${currentCount})` : ''}`}
             <Icon name='cart plus' />
           </Button>
         </div>
