@@ -8,7 +8,9 @@
   "dependencies": {
     "concurrently": "^4.0.1",
     "csvtojson": "^2.0.8",
-    "geolib": "^2.0.24"
+    "geolib": "^2.0.24",
+    "lodash": "^4.17.11",
+    "request": "^2.88.0"
   },
   "engines": {
     "node": "8.9.4"

@@ -26,6 +26,9 @@ const KESKO_PRODUCT_API = 'https://kesko.azure-api.net/v1/search/products';
 const KESKO_PRICE_API = `https://kesko.azure-api.net/products`;
 const SHOP_CODE = 'C609';
 
+// category / subcategory / segment
+const MATCHING_LEVEL = 'subcategory';
+
 const headers = {
   'Content-Type': 'application/json',
   'Ocp-Apim-Subscription-Key': process.env.API_KEY
@@ -57,11 +60,11 @@ const getProductInfo = ean => {
   });
 };
 
-const getMatchingProducts = segmentId => {
+const getMatchingProducts = id => {
   const body = JSON.stringify({
     filters: {
-      segment: {
-        id: segmentId
+      [MATCHING_LEVEL]: {
+        id: id
       }
     }
   });
@@ -175,7 +178,7 @@ router.get(
     const parsed = await parseProductInfo(data.results[0], ean);
 
     if (parsed.segment.id) {
-      const matchingRaw = await getMatchingProducts(parsed.segment.id);
+      const matchingRaw = await getMatchingProducts(parsed[MATCHING_LEVEL].id);
       const matching = JSON.parse(matchingRaw);
 
       if (matching.totalHits > 0) {
