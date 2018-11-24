@@ -25,7 +25,7 @@ export default class Scanner extends React.Component {
         decoder: {
           readers: ['ean_reader']
         },
-        locate: false
+        locate: true,
       },
       function(err) {
         if (err) {
