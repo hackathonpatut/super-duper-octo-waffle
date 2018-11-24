@@ -19,7 +19,8 @@ const Header = ({ resetEan, showList }) => <Menu fixed='top' inverted>
 
 class App extends Component {
   state = {
-    ean: null,
+    // ean: null,
+    ean: 6420256014004,
     showList: false,
     cart: [
       {
