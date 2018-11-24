@@ -300,56 +300,43 @@ router.get(
   })
 );
 
-const getScore = async function(ean) {
-  const res = await client.query(
-    `SELECT health, sustainability FROM products WHERE ean = '` + ean + `';`
-  );
-  // If ean is not found, return median value
-  if (res.rowCount == 0) {
-    return {
-      health: 19.7,
-      sustainability: 433
-    };
-  } else {
-    const scores = _.map(res.rows, o => {
-      return {
-        health: scaleHealth(parseFloat(o.health)),
-        sustainability: scaleSustainability(parseFloat(o.sustainability))
-      };
-    });
-    return scores[0];
+
+const getStats = async function(basketScores) {
+
+  const client = new Client()
+  client.connect();
+  const scores = await client.query('SELECT * FROM Baskets limit 100;');
+  await client.end();
+  var healths = _.map(scores.rows, o => {
+    return scaleHealth(parseFloat(o.health));
+  });
+  healths = healths.sort();
+
+  var sustainability = _.map(scores.rows, o => {
+    return scaleSustainability(parseFloat(o.sustainability));
+  })
+  sustainability = sustainability.sort();
+
+  const healthIndex = healths.findIndex(element => {
+    return element > basketScores.health;
+  });
+
+  const sustainabilityIndex = sustainability.findIndex(element => {
+    return element > basketScores.sustainability;
+  });
+
+  const basketRanking  = {
+    'health': healthIndex/scores.rowCount,
+    'sustainability': sustainabilityIndex/scores.rowCount
   }
-};
+  return basketRanking;
+}
 
 app.post('/cart-comparison', cache.route(), (req, res) => {
-  client.connect();
-  const j = { name: 'binchen' };
-  const k = JSON.stringify(j); // '{"name":"binchen"}'
-  console.log(req.body);
-  const eans = req.body.eans;
-
-  getScore(eans[0]).then(result => {
-    console.log('mooikka moi');
-    console.log(result);
+  const basketScores = req.body;
+  getStats(basketScores).then(scores => {
+    res.send(JSON.stringify(scores))
   });
-  console.log(typeof eans);
-
-  client.query('SELECT * FROM Baskets limit 100;', (error, result) => {
-    //console.log(error ? error.stack : result) // Hello World!
-    var healths = _.map(result.rows, o => {
-      return scaleHealth(parseFloat(o.health));
-    });
-    healths = healths.sort();
-    //console.log(healths);
-    client.end();
-  });
-
-  const dummy_res = {
-    health: 0.75,
-    sustainability: 0.6
-  };
-
-  res.send(JSON.stringify(dummy_res));
 
   //res.send(JSON.stringify(req.body));
 });
