@@ -141,6 +141,8 @@ const parseProductInfo = async (info, ean) => {
     id: info.subcategory.id
   };
 
+  response.popularity = info.popularity;
+
   if (info.attributes.WHERL) {
     response.origin = {
       id: info.attributes.WHERL.value.value || 'N/A',
@@ -245,17 +247,21 @@ router.get(
         )
           .then(infos => {
             parsed.matching = {
-              sustainability: _.sortBy(
+              sustainability: _.orderBy(
                 infos.filter(
-                  i => i.price.value !== -1 && i.origin.id !== 'N/A'
+                  i =>
+                    i.price.value !== -1 &&
+                    i.origin.id !== 'N/A' &&
+                    i.ean !== parsed.ean
                 ),
-                'sustainability.score'
+                ['sustainability.score', 'popularity'],
+                ['asc', 'desc']
               ).slice(0, 5),
 
               health: _.orderBy(
-                infos.filter(i => i.price.value !== -1),
-                'health.score',
-                'desc'
+                infos.filter(i => i.price.value !== -1 && i.ean !== parsed.ean),
+                ['health.score', 'popularity'],
+                ['desc', 'desc']
               ).slice(0, 5)
             };
           })
