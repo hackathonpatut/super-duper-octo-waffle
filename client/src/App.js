@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Menu, Icon, Button } from 'semantic-ui-react'
+import { Menu, Icon } from 'semantic-ui-react'
 import { Route, Switch, withRouter, Link } from 'react-router-dom';
 
 import Scanner from './components/Scanner';
 import Product from './components/Product';
 import CartOverview from './components/CartOverview';
 import Cart from './components/Cart';
+import Review from './components/Review';
 
 const Header = () => <Menu fixed='top' inverted>
   <Menu.Item header>
@@ -60,6 +61,7 @@ class App extends Component {
               />
             }
           />
+          <Route path='/review' render={() => <Review />}/>
           <Route path='/product/:ean' render={
             () => <div>
                 <Product
