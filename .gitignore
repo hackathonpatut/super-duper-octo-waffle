@@ -26,3 +26,4 @@ yarn-error.log*
 
 scripts/full-data.json
 scripts/apikey.js
+scripts/*.csv
