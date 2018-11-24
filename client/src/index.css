@@ -6,8 +6,11 @@ body {
 
 #root {
   max-width: 400px;
-  margin: 0 auto;
   position: relative;
+}
+
+#interactive {
+  margin-top: 60px;
 }
 
 #scanner-view {
@@ -19,3 +22,40 @@ body {
   margin-bottom: 3rem;
 }
 
+.product-card {
+  margin-top: 60px;
+}
+
+.product-card > .ui.card {
+  margin: auto;
+  width: inherit;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+}
+
+.product-card > .ui.card > .content {
+  margin-top: 10px;
+}
+
+.product-card .item {
+  margin-bottom: 5px;
+  display: flex !important;
+}
+
+.infotext {
+  display: flex;
+  justify-content: space-between;
+}
+
+.choiceInfo {
+  font-size: 80%;
+}
+
+.statistics {
+  justify-content: space-around;
+}
+
+.avatar-image {
+  border-radius: 0 !important;
+}
