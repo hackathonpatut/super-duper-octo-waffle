@@ -4,6 +4,7 @@ import { Route, Switch, withRouter, Link } from 'react-router-dom';
 
 import Scanner from './components/Scanner';
 import Product from './components/Product';
+import CartOverview from './components/CartOverview';
 import Cart from './components/Cart';
 
 const Header = () => <Menu fixed='top' inverted>
@@ -65,10 +66,13 @@ class App extends Component {
             }
           />
           <Route path='/product/:ean' render={
-            () => <Product
-              addToCart={this.addToCart}
-              handleSuggestionClick={this.handleSuggestionClick}
-              />
+            () => <div>
+                <Product
+                addToCart={this.addToCart}
+                handleSuggestionClick={this.handleSuggestionClick}
+                />
+                <CartOverview />
+              </div>
             }
           />
         </Switch>
