@@ -1,5 +1,6 @@
 const request = require('request');
 const _ = require('lodash');
+const csv = require('csvtojson');
 
 const apikey = require('./apikey.js');
 
@@ -12,27 +13,30 @@ const headers = {
 
 const body = JSON.stringify({});
 
-request(
-  KESKO_PRODUCT_API,
-  {
-    url: KESKO_PRODUCT_API,
-    method: 'POST',
-    headers: headers,
-    body
-  },
-  function(error, response, body) {
-    if (error || response.statusCode !== 200) {
-      console.log(error);
-    }
-
-    const dada = JSON.parse(body);
-    console.log(
-      _.uniq(
-        dada.results
-          .map(d => d.subcategory)
-          .filter(d => d)
-          .map(d => d.finnish)
-      ).sort()
-    );
-  }
-);
+csv()
+  .fromFile('./unique_EANs_in_receipt_data.csv')
+  .then(data => {
+    data.forEach(d => {
+      const body = JSON.stringify({
+        filters: {
+          ean: d.ean
+        }
+      });
+      setTimeout(() => {
+        request(
+          KESKO_PRODUCT_API,
+          {
+            url: KESKO_PRODUCT_API,
+            method: 'POST',
+            headers: headers,
+            body
+          },
+          function(error, response, body) {
+            if (error || response.statusCode !== 200) {
+              console.log(error, `ean not found: ${d.ean}`);
+            }
+          }
+        );
+      }, Math.random() * 600000);
+    });
+  });
