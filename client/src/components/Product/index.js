@@ -95,6 +95,7 @@ class Product extends Component {
 
   addToCart = () => {
     this.props.addToCart({
+      amount: this.state.selectedAmount,
       name: this.state.name,
       price: this.state.price,
     });
@@ -191,7 +192,7 @@ class Product extends Component {
               <Icon name='plus' />
             </Button>
           </Button.Group>
-          <Button className="add-cart" primary icon labelPosition='right'>
+          <Button className="add-cart" primary icon labelPosition='right' onClick={() => this.addToCart()}>
             Add to cart
             <Icon name='cart plus' />
           </Button>

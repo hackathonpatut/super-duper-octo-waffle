@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Menu, Icon } from 'semantic-ui-react'
+import _ from 'lodash';
+import { Menu, Icon, Button } from 'semantic-ui-react'
 import { Route, Switch, withRouter, Link } from 'react-router-dom';
 
 import Scanner from './components/Scanner';
@@ -21,12 +22,8 @@ const Header = () => <Menu fixed='top' inverted>
 
 class App extends Component {
   state = {
-    cart: [
-      {
-        name: 'jepa jee',
-        price: 12.34,
-      }
-    ],
+    // {amount: number, name: string, price: number}
+    cart: [],
   };
 
   changeEan = (result) => {
@@ -40,8 +37,16 @@ class App extends Component {
   }
 
   addToCart = (newProd) => {
-    const cart = this.state.cart.concat([newProd]);
-    this.setState({ cart });
+    const existingProduct = _.find(this.state.cart, o => o.name === newProd.name);
+
+    const productToAdd = existingProduct ? {
+      ...newProd,
+      amount: existingProduct.amount + newProd.amount,
+    } : newProd;
+
+    const without = this.state.cart.filter(o => o.name !== newProd.name);
+    this.setState({ cart: without.concat(productToAdd) });
+    
   }
 
   handleSuggestionClick = (ean) => {
