@@ -103,6 +103,8 @@ class Product extends Component {
       price: this.state.price,
       image: this.state.image,
       ean: this.state.code,
+      health: this.state.health,
+      sustainability: this.state.sustainability,
     });
   }
 
@@ -148,7 +150,7 @@ class Product extends Component {
     const currentCount = currentItem ? currentItem.amount : 0;
 
     return (
-      <div className="product-info">
+      <div className="product-info page">
         <div className="product-header">
           <div className="image-wrapper">
             <img src={`${this.state.image || "http://placehold.it/200x200"}`} alt='' />
@@ -189,6 +191,7 @@ class Product extends Component {
                 handleItemClick={this.handleSuggestionClick}
               />
             }
+            <Divider />
           </React.Fragment>
         }
         <div className="product-button-row">
@@ -206,7 +209,6 @@ class Product extends Component {
             <Icon name='cart plus' />
           </Button>
         </div>
-        <Divider />
       </div>
     );
   }

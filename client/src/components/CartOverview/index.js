@@ -8,17 +8,22 @@ export default class CartOverview extends Component {
     const { items, goToCart } = this.props;
     const totalPrice = items.reduce((p, v) => p + v.amount * v.price, 0).toFixed(2);
 
+
+    const totalInCart = items.reduce((p, v) => p + v.amount, 0);
+    const totalHealth = totalInCart !== 0 ? (items.reduce((p, v) => p + v.amount * v.health, 0)) / totalInCart : 0;
+    const totalSustainability = totalInCart !== 0 ? (items.reduce((p, v) => p + v.amount * v.sustainability, 0)) / totalInCart : 0;
+
     return (
       <Card.Group className={`cart-overview ${(totalPrice < 0.01 ? 'hidden' : '')}`}>
         <Card>
           <Card.Content>
             <Card.Header>TOTAL: <span>{totalPrice}€</span></Card.Header>
             <div className="progress">
-              <Progress value={40} hideText={true} type='sustainable' />
+              <Progress value={Math.round(totalSustainability * 100)} hideText={true} type='sustainable' />
               Average
             </div>
             <div className="progress">
-              <Progress value={80} hideText={true} type='health' />
+              <Progress value={Math.round(totalHealth * 100)} hideText={true} type='health' />
               Average
             </div>
           </Card.Content>

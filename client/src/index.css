@@ -161,3 +161,7 @@ body {
   flex-direction: column;
   padding: 20px;
 }
+
+.page {
+  padding-bottom: 200px;
+}

@@ -11,7 +11,7 @@ export default class Cart extends Component {
     const sortedList = _.sortBy(items, 'name');
 
     return (
-      <div className="cart-info">
+      <div className="cart-info page">
         <List divided verticalAlign='middle'>
           {sortedList.map(item => (
             <List.Item key={item.name} className="suggestion-list-item" style={{ paddingTop: '10px', paddingBottom: '10px' }}>
