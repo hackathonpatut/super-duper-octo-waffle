@@ -22,6 +22,7 @@ class Product extends Component {
     healthChoices: [],
     isChoicesVisible: false,
     selectedAmount: 1,
+    isCheckoutButtonPressed: false,
   };
 
   getData = (ean) => {
@@ -96,18 +97,6 @@ class Product extends Component {
     }
   }
 
-  addToCart = () => {
-    this.props.addToCart({
-      amount: this.state.selectedAmount,
-      name: this.state.name,
-      price: this.state.price,
-      image: this.state.image,
-      ean: this.state.code,
-      health: this.state.health,
-      sustainability: this.state.sustainability,
-    });
-  }
-
   healthToColor = (score) => {
     if (score < -100) return 'red';
     if (score < -50) return 'orange';
@@ -135,6 +124,28 @@ class Product extends Component {
     this.setState({ selectedAmount: newAmount });
   }
 
+  navigateToStart = () => {
+    this.props.history.push(`/`);
+  }
+
+  addToCart = () => {
+
+    this.setState({ isCheckoutButtonPressed: true });
+
+    this.props.addToCart({
+      amount: this.state.selectedAmount,
+      name: this.state.name,
+      price: this.state.price,
+      image: this.state.image,
+      ean: this.state.code,
+      health: this.state.health,
+      sustainability: this.state.sustainability,
+    });
+
+    window.setTimeout(this.navigateToStart, 1000);
+
+  }
+
   render() {
     if (this.state.code === -1) return <p>Product not found</p>;
     if (this.state.code === null) return (
@@ -148,6 +159,11 @@ class Product extends Component {
     const currentCart = this.props.items;
     const currentItem = currentCart.find(p => p.name === this.state.name);
     const currentCount = currentItem ? currentItem.amount : 0;
+
+    const checkoutButtonBgColour = this.state.isCheckoutButtonPressed ? 'green' : '#2185d0';
+    const addToCartText = this.state.isCheckoutButtonPressed ? 
+      'Item(s) added' :
+      `Add to cart${currentCount !== 0 ? ` (${currentCount})` : ''}`
 
     return (
       <div className="product-info page">
@@ -204,8 +220,16 @@ class Product extends Component {
               <Icon name='plus' />
             </Button>
           </Button.Group>
-          <Button className="add-cart" primary icon labelPosition='right' onClick={() => this.addToCart()}>
-            {`Add to cart${currentCount !== 0 ? ` (${currentCount})` : ''}`}
+          <Button
+            style={{background: checkoutButtonBgColour}}
+            className="add-cart"
+            primary
+            icon
+            labelPosition='right'
+            onClick={this.addToCart}
+            disabled={this.state.isCheckoutButtonPressed}
+          >
+            {addToCartText}
             <Icon name='cart plus' />
           </Button>
         </div>
