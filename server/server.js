@@ -165,7 +165,7 @@ const parseProductInfo = async (info, ean) => {
 
   response.sustainability = {};
   if (response.origin.id !== 'N/A') {
-    response.sustainability.distance = distances[response.origin.id];
+    response.sustainability.distance = distances[response.origin.id].toFixed(1);
 
     if (info.attributes.TX_YMPMER && info.attributes.TX_YMPMER.value) {
       response.sustainability.marks = Object.keys(
@@ -205,7 +205,7 @@ const parseProductInfo = async (info, ean) => {
     response.health.carbohydrates = info.attributes.HIHYDR.value.value;
   }
 
-  response.health.score = calculateHealthScore(response);
+  response.health.score = calculateHealthScore(response).toFixed(1);
 
   const priceDataRaw = await getProductPrice(ean);
   const priceData = parseProductPrice(JSON.parse(priceDataRaw));
