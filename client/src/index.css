@@ -22,44 +22,6 @@ body {
   height: 400px;
 }
 
-.product-card {
-  margin-top: 60px;
-}
-
-.product-card > .ui.card {
-  margin: auto;
-  width: inherit;
-  border-radius: 0;
-  border: none;
-  box-shadow: none;
-}
-
-.product-card > .ui.card > .content {
-  margin-top: 10px;
-}
-
-.product-card .item {
-  margin-bottom: 5px;
-  display: flex !important;
-}
-
-.infotext {
-  display: flex;
-  justify-content: space-between;
-}
-
-.choiceInfo {
-  font-size: 80%;
-}
-
-.statistics {
-  justify-content: space-around;
-}
-
-.avatar-image {
-  border-radius: 0 !important;
-}
-
 .cart-overview {
   position: fixed;
   bottom: 0;
@@ -69,24 +31,74 @@ body {
   text-align: right;
 }
 
-  .cart-overview .ui.card {
-    width: 100%;
-    border-radius: 0;
-  }
+.cart-overview .ui.card {
+  width: 100%;
+  border-radius: 0;
+}
 
-  .cart-overview .progress {
-    width: 80px;
-    float: left;
-    margin: 0 15px 0 0;
-  }
+.cart-overview .progress {
+  width: 80px;
+  float: left;
+  margin: 0 15px 0 0;
+}
 
-  .cart-overview .header {
-    padding-top: 1em;
-  }
+.cart-overview .header {
+  padding-top: 1em;
+}
 
-  .cart-overview .header span {
-    display: block;
-    font-weight: bold;
-    font-size: 1.5em;
-    margin-top: 0.3em;
-  }
+.cart-overview .header span {
+  display: block;
+  font-weight: bold;
+  font-size: 1.5em;
+  margin-top: 0.3em;
+}
+
+/* NEW CONTENT */
+.product-info {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.image-wrapper {
+  min-width: 80px;
+  max-height: 80px;
+  border: 1px solid #f5f5f5;
+  border-radius: 10px;
+  padding: 5px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.image-wrapper > img {
+  height: 100%;
+  width: auto;
+}
+
+.product-header {
+  display: flex;
+  flex-direction: row;
+}
+
+.product-header > .product-meta {
+  margin-left: 20px;
+  flex-grow: 1;
+}
+
+.product-meta h3 {
+  margin: 0;
+  padding: 0;
+}
+
+.product-header > .product-price {
+  margin-left: 20px;
+  font-size: 18px;
+  color: #000;
+}
+
+.product-button-row {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

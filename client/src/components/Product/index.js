@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Card, Image, Dimmer, Loader, Statistic, Divider } from 'semantic-ui-react';
+import { Flag, Button, Input, Image, Card, Dimmer, Loader, Statistic, Divider, Icon } from 'semantic-ui-react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import SuggestionList from './SuggestionList';
@@ -62,7 +62,10 @@ class Product extends Component {
             image,
             sustainabilityChoices,
             healthChoices,
-            country: origin.country,
+            country: {
+              name: origin.country,
+              id: origin.id,
+            },
             sustainability: sustainability.score,
             health: health.score,
           });
@@ -128,6 +131,39 @@ class Product extends Component {
     );
 
     const ean = this.props.match.params.ean;
+
+    return (
+      <div className="product-info">
+        <div className="product-header">
+          <div className="image-wrapper">
+            <img src={`${this.state.image || "http://placehold.it/200x200"}`} />
+          </div>
+          <div className="product-meta">
+            <h3>{this.state.name}</h3>
+            <span>Origin: <Flag name={this.state.country.id.toLowerCase()} />{this.state.country.name}</span>
+          </div>
+          <p className="product-price">{this.state.price}€</p>
+        </div>
+        <Divider />
+        <Button className="check-options" secondary>See alternative products</Button>
+        <div className="product-button-row">
+          <Button.Group>
+            <Button icon>
+              <Icon name='minus' />
+            </Button>
+            <Button disabled>1</Button>
+            <Button icon>
+              <Icon name='plus' />
+            </Button>
+          </Button.Group>
+          <Button className="add-cart" primary icon labelPosition='right'>
+            Add to cart
+            <Icon name='cart plus' />
+          </Button>
+        </div>
+        <Divider />
+      </div>
+    );
 
     return (
       <div className="product-card">
