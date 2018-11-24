@@ -158,7 +158,7 @@ class Product extends Component {
             <Progress value={this.state.sustainability.score} type='green' />
           </div>
         </div>
-        <Button style={{ marginTop: '1em' }} className="check-options" basic onClick={() => this.toggleAlternatives()}>
+        <Button style={{ marginTop: '1em' }} color='blue' className="check-options" basic onClick={() => this.toggleAlternatives()}>
           {`${this.state.isChoicesVisible ? 'Hide' : 'See'} alternative products`}
         </Button>
         {this.state.isChoicesVisible &&
