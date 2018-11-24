@@ -11,12 +11,13 @@ import { getRedisClient } from './redis';
 
 require('dotenv').config();
 
-const REDIS_URL = process.env.REDIS_URL ?
-  process.env.REDIS_URL : 'http://localhost:6379';
+const REDIS_URL = process.env.REDIS_URL
+  ? process.env.REDIS_URL
+  : 'http://localhost:6379';
 
 const cache = getRedisClient(REDIS_URL);
 
-const client = new Client()
+const client = new Client();
 
 const app = express();
 
@@ -44,7 +45,8 @@ const MAX_HEALTH = 88.1;
 const MIN_SUSTAINABILITY = 0;
 const MAX_SUSTAINABILITY = 16892;
 
-const scaleHealth = value => (value - MIN_HEALTH) / (MAX_HEALTH - MIN_HEALTH);
+const scaleHealth = value =>
+  (0.7 * (value - MIN_HEALTH)) / (MAX_HEALTH - MIN_HEALTH);
 const scaleSustainability = value =>
   1 - (value - MIN_SUSTAINABILITY) / (MAX_SUSTAINABILITY - MIN_SUSTAINABILITY);
 
@@ -300,55 +302,54 @@ router.get(
 
 const getScore = async function(ean) {
   const res = await client.query(
-  `SELECT health, sustainability FROM products WHERE ean = '` + ean + `';`);
+    `SELECT health, sustainability FROM products WHERE ean = '` + ean + `';`
+  );
   // If ean is not found, return median value
   if (res.rowCount == 0) {
     return {
-      'health': 19.7,
-      'sustainability': 433
-    }
+      health: 19.7,
+      sustainability: 433
+    };
   } else {
-    const scores =  _.map(res.rows, o => {
-      return ({
-        'health': scaleHealth(parseFloat(o.health)),
-        'sustainability': scaleSustainability(parseFloat(o.sustainability))
-      });
+    const scores = _.map(res.rows, o => {
+      return {
+        health: scaleHealth(parseFloat(o.health)),
+        sustainability: scaleSustainability(parseFloat(o.sustainability))
+      };
     });
-    return scores[0]
+    return scores[0];
   }
-}
-
+};
 
 app.post('/cart-comparison', cache.route(), (req, res) => {
   client.connect();
-  const j={'name':'binchen'};
+  const j = { name: 'binchen' };
   const k = JSON.stringify(j); // '{"name":"binchen"}'
   console.log(req.body);
   const eans = req.body.eans;
 
   getScore(eans[0]).then(result => {
-    console.log("mooikka moi")
-    console.log(result)
-  })
-  console.log(typeof(eans));
-
+    console.log('mooikka moi');
+    console.log(result);
+  });
+  console.log(typeof eans);
 
   client.query('SELECT * FROM Baskets limit 100;', (error, result) => {
     //console.log(error ? error.stack : result) // Hello World!
     var healths = _.map(result.rows, o => {
-      return scaleHealth(parseFloat(o.health))
+      return scaleHealth(parseFloat(o.health));
     });
-    healths = healths.sort()
+    healths = healths.sort();
     //console.log(healths);
     client.end();
-  })
+  });
 
   const dummy_res = {
-    'health': 0.75,
-    'sustainability': 0.6
-  }
+    health: 0.75,
+    sustainability: 0.6
+  };
 
-  res.send(JSON.stringify(dummy_res))
+  res.send(JSON.stringify(dummy_res));
 
   //res.send(JSON.stringify(req.body));
 });
@@ -360,28 +361,25 @@ app.post('/cart-comparison', cache.route(), (req, res) => {
   heath-ranki
 }
 */
-router.get('/cart-comparison',
-  cache.route(),
-  (err, res) => {
-    client.connect();
-    client.query('SELECT COUNT(*) FROM Products;', (error, result) => {
-      console.log(error ? error.stack : result) // Hello World!
-      client.end()
-    })
+router.get('/cart-comparison', cache.route(), (err, res) => {
+  client.connect();
+  client.query('SELECT COUNT(*) FROM Products;', (error, result) => {
+    console.log(error ? error.stack : result); // Hello World!
+    client.end();
+  });
 
-/*
+  /*
   await client.query(
     'SELECT COUNT(*) FROM Products;'
   );
   */
-/*
+  /*
   client.query('SELECT COUNT(*) FROM Products;', (err, res) => {
 
   console.log(err ? err.stack : res.rows[0].message) // Hello World!
 })*/
   res.send('res');
 });
-
 
 /*
 const res = await client.query(
