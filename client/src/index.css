@@ -29,6 +29,7 @@ body {
     z-index: 10;
     display: block;
     font-size: 30px;
+    line-height: 30px;
     padding: 60px 0;
     color: #fff;
     font-weight: bold;
