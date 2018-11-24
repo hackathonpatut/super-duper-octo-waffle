@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Button, Card, Image, Dimmer, Loader, Statistic, Divider } from 'semantic-ui-react';
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 import SuggestionList from './SuggestionList';
 
-export default class Product extends Component {
+class Product extends Component {
   state = {
     code: null,
     name: null,
@@ -74,14 +75,15 @@ export default class Product extends Component {
   }
 
   componentDidMount() {
-    const { ean } = this.props;
-    this.getData(ean);
+    const ean = this.props.match.params.ean;
+    if (ean) this.getData(ean);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.ean !== this.props.ean) {
+    if (this.props.match.params.ean && nextProps.match.params.ean && 
+      nextProps.match.params.ean !== this.props.match.params.ean) {
       this.setState({ code: null });
-      this.getData(nextProps.ean);
+      this.getData(nextProps.match.params.ean);
     }
   }
 
@@ -125,6 +127,8 @@ export default class Product extends Component {
       </div>
     );
 
+    const ean = this.props.match.params.ean;
+
     return (
       <div className="product-card">
         <Card>
@@ -132,7 +136,7 @@ export default class Product extends Component {
           <Card.Content>
             <Card.Header>{this.state.name}</Card.Header>
             <Card.Meta className="infotext">
-              <span>{`EAN: ${this.props.ean}` || 'EAN: XXX'}</span>
+              <span>{`EAN: ${ean}` || 'EAN: XXX'}</span>
               <span>{this.state.price} €</span>
             </Card.Meta>
             <Card.Meta>
@@ -171,3 +175,5 @@ export default class Product extends Component {
     );
   }
 }
+
+export default withRouter(Product);

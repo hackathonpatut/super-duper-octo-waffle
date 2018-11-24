@@ -1,27 +1,29 @@
 import React, { Component } from 'react';
 import { Menu, Icon, Button } from 'semantic-ui-react'
+import { Route, Switch, withRouter, Link } from 'react-router-dom';
 
 import Scanner from './components/Scanner';
 import Product from './components/Product';
 import Cart from './components/Cart';
 
-const Header = ({ resetEan, showList }) => <Menu fixed='top' inverted>
-  <Menu.Item as='a' header>
+const Header = () => <Menu fixed='top' inverted>
+  <Menu.Item header>
     Super scanner
   </Menu.Item>
-  <Menu.Item as='a' onClick={showList}>
-    List
+  <Menu.Item>
+    <Link to='/cart'>
+      List
+    </Link>
   </Menu.Item>
-  <Menu.Item as='a' onClick={resetEan}>
-    <Icon className="barcode" name='barcode' size='large' />
+  <Menu.Item>
+    <Link to='/'>
+      <Icon className="barcode" name='barcode' size='large' />
+    </Link>
   </Menu.Item>
 </Menu>;
 
 class App extends Component {
   state = {
-    // ean: null,
-    ean: 6420256014004,
-    showList: false,
     cart: [
       {
         name: 'jepa jee',
@@ -31,20 +33,14 @@ class App extends Component {
   };
 
   changeEan = (result) => {
-    this.setState({ ean: result.codeResult.code });
+    const ean = result.codeResult.code;
+    if (!ean) {
+      console.log('Invalid EAN!')
+    } else {
+      this.props.history.push(`/product/${ean}`)
+    }
   }
 
-  resetEan = () => {
-    this.setState({ ean: null });
-  }
-
-  showList = () => {
-    this.setState({ showList: true });
-  }
-
-  closeList = () => {
-    this.setState({ showList: false });
-  }
 
   addToCart = (newProd) => {
     const cart = this.state.cart.concat([newProd]);
@@ -52,22 +48,30 @@ class App extends Component {
   }
 
   handleSuggestionClick = (ean) => {
-    this.setState({ ean });
+    this.changeEan({ codeResult: { code: ean }});
   }
 
   render() {
-    const { showList, ean } = this.state;
-
     return (
       <div className="App">
-        <Header resetEan={this.resetEan} showList={this.showList} />
-        { showList
-          ? <Cart items={this.state.cart} closeList={this.closeList} />
-          : ( ean
-              ? <Product ean={ean} addToCart={this.addToCart} handleSuggestionClick={this.handleSuggestionClick} />
-              : <Scanner onDetected={this.changeEan} />
-            )
-        }
+        <Header />
+        <Switch>
+          <Route exact path='/' render={() => <Scanner onDetected={this.changeEan} />}/>
+          <Route path='/cart' render={
+            () => <Cart
+              items={this.state.cart}
+              closeList={this.closeList}
+              />
+            }
+          />
+          <Route path='/product/:ean' render={
+            () => <Product
+              addToCart={this.addToCart}
+              handleSuggestionClick={this.handleSuggestionClick}
+              />
+            }
+          />
+        </Switch>
         <div style={{ marginTop: 400 }}>
           <Button onClick={() => this.changeEan({ codeResult: { code: '8717775818090' }})}>ES</Button>
           <Button onClick={() => this.changeEan({ codeResult: { code: '6410405060457' }})}>Tomaatti</Button>
@@ -77,4 +81,4 @@ class App extends Component {
     );
   }
 }
-export default App;
+export default withRouter(App);
