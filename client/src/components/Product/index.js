@@ -44,7 +44,8 @@ class Product extends Component {
               id: product.origin.id,
             },
             price: product.price.value,
-            score: product.sustainability.score,
+            healthScore: product.health.score,
+            sustainabilityScore: product.sustainability.score,
           })).filter(p => p.ean !== ean).slice(0, Math.min(matching.sustainability.length, 3));
 
           const healthChoices = matching.health.map(product => ({
@@ -56,7 +57,8 @@ class Product extends Component {
               id: product.origin.id,
             },
             price: product.price.value,
-            score: product.health.score,
+            healthScore: product.health.score,
+            sustainabilityScore: product.sustainability.score,
           })).filter(p => p.ean !== ean).slice(0, Math.min(matching.health.length, 3));
 
           this.setState({
@@ -171,21 +173,19 @@ class Product extends Component {
         </Button>
         {this.state.isChoicesVisible &&
           <React.Fragment>
-            {this.state.sustainabilityChoices && this.state.sustainabilityChoices.length > 0 &&
-              <SuggestionList
-                type="sustainability"
-                title="Be more sustainable!"
-                data={this.state.sustainabilityChoices}
-                colorMapper={this.distanceToColor}
-                handleItemClick={this.handleSuggestionClick}
-              />
-            }
             {this.state.healthChoices && this.state.healthChoices.length > 0 &&
               <SuggestionList
-                type="health"
                 title="Be more healthy!"
                 data={this.state.healthChoices}
                 colorMapper={this.healthToColor}
+                handleItemClick={this.handleSuggestionClick}
+              />
+            }
+            {this.state.sustainabilityChoices && this.state.sustainabilityChoices.length > 0 &&
+              <SuggestionList
+                title="Be more sustainable!"
+                data={this.state.sustainabilityChoices}
+                colorMapper={this.distanceToColor}
                 handleItemClick={this.handleSuggestionClick}
               />
             }
