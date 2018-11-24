@@ -7,7 +7,7 @@ export default class Progress extends Component {
   render() {
     const { value, type } = this.props;
 
-    const color = (type === 'health' ? '#6435c9' : '#21ba45');
+    const color = (type === 'health' ? '#2185d0' : '#21ba45');
     const text = (type === 'health' ? 'Healthy' : 'Ecological');
 
     const hideText = this.props.hideText || false;

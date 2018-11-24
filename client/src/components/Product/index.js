@@ -168,8 +168,9 @@ class Product extends Component {
     const currentItem = currentCart.find(p => p.name === this.state.name);
     const currentCount = currentItem ? currentItem.amount : 0;
 
-    const checkoutButtonBgColour = this.state.isCheckoutButtonPressed ? 'green' : '#2185d0';
-    const addToCartText = this.state.isCheckoutButtonPressed ? 
+    const checkoutButtonBgColour = this.state.isCheckoutButtonPressed ? 'green' : 'orange';
+
+    const addToCartText = this.state.isCheckoutButtonPressed ?
       'Item(s) added' :
       `Add to cart${currentCount !== 0 ? ` (${currentCount})` : ''}`
 
@@ -229,9 +230,8 @@ class Product extends Component {
             </Button>
           </Button.Group>
           <Button
-            style={{background: checkoutButtonBgColour}}
+            color={checkoutButtonBgColour}
             className="add-cart"
-            primary
             icon
             labelPosition='right'
             onClick={this.addToCart}
