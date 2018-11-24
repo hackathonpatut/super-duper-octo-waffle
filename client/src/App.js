@@ -53,26 +53,30 @@ class App extends Component {
       <div className="App">
         <Header />
         <Switch>
-          <Route exact path='/' render={() => <Scanner onDetected={this.changeEan} />}/>
+          <Route exact path='/' render={() =>
+            <Scanner onDetected={this.changeEan} />
+          }/>
           <Route path='/cart' render={
-            () => <Cart
-              items={this.state.cart}
-              closeList={this.closeList}
+            () =>
+              <Cart
+                items={this.state.cart}
+                closeList={this.closeList}
               />
             }
           />
           <Route path='/review' render={() => <Review />}/>
           <Route path='/product/:ean' render={
-            () => <div>
-                <Product
+            () =>
+              <Product
                 addToCart={this.addToCart}
                 handleSuggestionClick={this.handleSuggestionClick}
-                />
-                <CartOverview />
-              </div>
+              />
             }
           />
         </Switch>
+        {this.props.location.pathname !== '/cart' &&
+          <CartOverview />
+        }
       </div>
     );
   }
