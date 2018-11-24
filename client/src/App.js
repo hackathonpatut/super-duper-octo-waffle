@@ -68,10 +68,6 @@ class App extends Component {
     this.changeEan({ codeResult: { code: ean }});
   }
 
-  goToCart = () => {
-    this.props.history.push(`/cart`);
-  }
-
   render() {
     return (
       <div className="App">
@@ -103,7 +99,6 @@ class App extends Component {
         </Switch>
         <CartOverview
           items={this.state.cart}
-          goToCart={this.goToCart}
         />
       </div>
     );

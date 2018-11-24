@@ -1,20 +1,31 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { Card, Button, Icon } from 'semantic-ui-react';
 import Progress from '../Progress';
 
-export default class CartOverview extends Component {
+export default withRouter(class CartOverview extends Component {
+
+  goToCart = () => {
+    this.props.history.push(`/cart`);
+  }
+
+  goBack = () => {
+    this.props.history.goBack();
+  }
+
   render() {
 
-    const { items, goToCart } = this.props;
+    const { items, goToCart, location } = this.props;
     const totalPrice = items.reduce((p, v) => p + v.amount * v.price, 0).toFixed(2);
 
+    const isCart = location.pathname === '/cart';
 
     const totalInCart = items.reduce((p, v) => p + v.amount, 0);
     const totalHealth = totalInCart !== 0 ? (items.reduce((p, v) => p + v.amount * v.health, 0)) / totalInCart : 0;
     const totalSustainability = totalInCart !== 0 ? (items.reduce((p, v) => p + v.amount * v.sustainability, 0)) / totalInCart : 0;
 
     return (
-      <Card.Group className={`cart-overview ${(totalPrice < 0.01 ? 'hidden' : '')}`}>
+      <Card.Group className={`cart-overview ${(totalPrice < 0.01 && !isCart ? 'hidden' : '')}`}>
         <Card>
           <Card.Content>
             <Card.Header>TOTAL: <span>{totalPrice}€</span></Card.Header>
@@ -28,15 +39,20 @@ export default class CartOverview extends Component {
             </div>
           </Card.Content>
           <Card.Content extra>
-              <Button icon labelPosition='right' onClick={goToCart}>
+            {isCart ? 
+              <Button icon labelPosition='left' onClick={this.goBack}>
+                Go back <Icon name='arrow left' />
+              </Button> :
+              <Button icon labelPosition='right' onClick={this.goToCart}>
                 View contents <Icon name='list ol' />
               </Button>
-              <Button color='orange' icon labelPosition='right' onClick={goToCart}>
-                Payment <Icon name='right arrow' />
-              </Button>
+            }
+            <Button color='orange' icon labelPosition='right' onClick={this.goToCart} disabled={items.length === 0}>
+              Payment <Icon name='right arrow' />
+            </Button>
           </Card.Content>
         </Card>
       </Card.Group>
     );
   }
-}
+});
