@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
+import { ToastContainer } from 'react-toastify';
 import { Menu, Icon } from 'semantic-ui-react'
 import { Route, Switch, withRouter, Link } from 'react-router-dom';
 
@@ -71,6 +72,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <ToastContainer/>
         <Header />
         <Switch>
           <Route exact path='/' render={() =>

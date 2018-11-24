@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Flag, Button, Dimmer, Loader, Divider, Icon } from 'semantic-ui-react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import SuggestionList from './SuggestionList';
 import Progress from '../Progress';
 
@@ -147,7 +148,14 @@ class Product extends Component {
   }
 
   render() {
-    if (this.state.code === -1) return <p>Product not found</p>;
+    if (this.state.code === -1) {
+      toast.error("Invalid EAN!", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      this.navigateToStart();
+      return null;
+    }
+
     if (this.state.code === null) return (
       <div className="loader">
         <Dimmer active inverted>
