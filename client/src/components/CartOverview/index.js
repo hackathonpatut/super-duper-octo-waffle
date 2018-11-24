@@ -12,13 +12,15 @@ export default class CartOverview extends Component {
       <Card.Group className={`cart-overview ${(totalPrice < 0.01 ? 'hidden' : '')}`}>
         <Card>
           <Card.Content>
+            <Card.Header>TOTAL: <span>{totalPrice}€</span></Card.Header>
             <div className="progress">
-              <Progress value={80} type='health' />
+              <Progress value={40} hideText={true} type='sustainable' />
+              Average
             </div>
             <div className="progress">
-              <Progress value={40} type='sustainable' />
+              <Progress value={80} hideText={true} type='health' />
+              Average
             </div>
-            <Card.Header>Cart total: <span>{totalPrice}€</span></Card.Header>
           </Card.Content>
           <Card.Content extra>
               <Button icon labelPosition='right' onClick={goToCart}>
