@@ -52,7 +52,7 @@ class App extends Component {
   }
 
   handleSuggestionClick = (ean) => {
-    this.changeEan({ codeResult: { code: ean }});
+    this.setState({ ean });
   }
 
   render() {
