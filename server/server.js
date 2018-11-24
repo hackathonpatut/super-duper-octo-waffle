@@ -134,7 +134,7 @@ const parseProductInfo = async (info, ean) => {
     };
   }
 
-  if (info.pictureUrls) {
+  if (info.pictureUrls && info.pictureUrls.length > 0) {
     response.image = `${info.pictureUrls[0].original}?w=400&fit=clip`;
   } else {
     response.image = 'N/A';
