@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Flag, List, Card, Image, Dimmer, Loader, Statistic, Divider } from 'semantic-ui-react';
+import { Card, Image, Dimmer, Loader, Statistic, Divider } from 'semantic-ui-react';
 import axios from 'axios';
+import SuggestionList from './SuggestionList';
 
 export default class Product extends Component {
   state = {
@@ -18,10 +19,7 @@ export default class Product extends Component {
     healthChoices: [],
   };
 
-  componentDidMount() {
-    const { ean } = this.props;
-
-
+  getData = (ean) => {
     axios
       .get(`/product/${ean}`)
       .then(response => {
@@ -33,6 +31,7 @@ export default class Product extends Component {
           const { name, price, image, matching, origin, distance, health } = response.data;
 
           const sustainabilityChoices = matching.sustainability.map(product => ({
+            ean: product.ean,
             name: product.name,
             image: product.image,
             country: {
@@ -41,9 +40,10 @@ export default class Product extends Component {
             },
             price: product.price.value,
             score: product.distance, // FIXME:
-          })).slice(0, Math.min(matching.sustainability.length, 3));
+          })).filter(p => p.ean !== ean).slice(0, Math.min(matching.sustainability.length, 3));
 
           const healthChoices = matching.health.map(product => ({
+            ean: product.ean,
             name: product.name,
             image: product.image,
             country: {
@@ -52,7 +52,7 @@ export default class Product extends Component {
             },
             price: product.price.value,
             score: product.health.score, // FIXME:
-          })).slice(0, Math.min(matching.health.length, 3));
+          })).filter(p => p.ean !== ean).slice(0, Math.min(matching.health.length, 3));
 
           this.setState({
             code: ean,
@@ -73,6 +73,18 @@ export default class Product extends Component {
       });
   }
 
+  componentDidMount() {
+    const { ean } = this.props;
+    this.getData(ean);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.ean !== this.props.ean) {
+      this.setState({ code: null });
+      this.getData(nextProps.ean);
+    }
+  }
+
   addToCart = () => {
     this.props.addToCart({
       name: this.state.name,
@@ -90,6 +102,10 @@ export default class Product extends Component {
     if (score < 300) return 'green';
     if (score < 1000) return 'orange';
     return 'red';
+  }
+
+  handleSuggestionClick = (ean) => {
+    this.props.handleSuggestionClick(ean);
   }
 
   render() {
@@ -134,51 +150,19 @@ export default class Product extends Component {
                 </Statistic>
               </Statistic.Group>
               <Divider />
-              <h5>Be more sustainable!</h5>
-              <List>
-                {this.state.sustainabilityChoices.map((choice, ind) => (
-                  <React.Fragment key={choice.name}>
-                    <List.Item>
-                      <Image className="avatar-image" avatar src={`${choice.image || "http://placehold.it/200x200"}`} />
-                      <List.Content style={{ flexGrow: 1 }}>
-                        <List.Header as='a' style={{ display: 'flex', justifyContent: 'space-between'}}>
-                          <span>{choice.name}</span>
-                          <span style={{color: this.distanceToColor(choice.score), paddingLeft: '10px'}}>{choice.score}</span>
-                        </List.Header>
-                        <List.Description>
-                          <span className="choiceInfo">
-                              <Flag name={choice.country.id.toLowerCase()} />
-                              {`${choice.country.name}, price: ${choice.price} €`}
-                          </span>
-                        </List.Description>
-                      </List.Content>
-                    </List.Item>
-                  </React.Fragment>
-                ))}
-              </List>
+              <SuggestionList
+                title="Be more sustainable!"
+                data={this.state.sustainabilityChoices}
+                colorMapper={this.distanceToColor}
+                handleItemClick={this.handleSuggestionClick}
+              />
               <Divider />
-              <h5>Be more healthy!</h5>
-              <List>
-                {this.state.healthChoices.map((choice, ind) => (
-                  <React.Fragment key={choice.name}>
-                    <List.Item>
-                      <Image className="avatar-image" avatar src={`${choice.image || "http://placehold.it/200x200"}`} />
-                      <List.Content style={{ flexGrow: 1 }}>
-                        <List.Header as='a' style={{ display: 'flex', justifyContent: 'space-between'}}>
-                          <span>{choice.name}</span>
-                          <span style={{color: this.healthToColor(choice.score), paddingLeft: '10px'}}>{choice.score}</span>
-                        </List.Header>
-                        <List.Description>
-                          <span className="choiceInfo">
-                              <Flag name={choice.country.id.toLowerCase()} />
-                              {`${choice.country.name}, price: ${choice.price} €`}
-                          </span>
-                        </List.Description>
-                      </List.Content>
-                    </List.Item>
-                  </React.Fragment>
-                ))}
-              </List>
+              <SuggestionList
+                title="Be more healthy!"
+                data={this.state.healthChoices}
+                colorMapper={this.healthToColor}
+                handleItemClick={this.handleSuggestionClick}
+              />
             </Card.Description>
           </Card.Content>
         </Card>

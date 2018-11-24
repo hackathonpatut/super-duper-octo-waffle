@@ -51,6 +51,10 @@ class App extends Component {
     this.setState({ cart });
   }
 
+  handleSuggestionClick = (ean) => {
+    this.changeEan({ codeResult: { code: ean }});
+  }
+
   render() {
     const { showList, ean } = this.state;
 
@@ -60,7 +64,7 @@ class App extends Component {
         { showList
           ? <Cart items={this.state.cart} closeList={this.closeList} />
           : ( ean
-              ? <Product ean={ean} addToCart={this.addToCart} />
+              ? <Product ean={ean} addToCart={this.addToCart} handleSuggestionClick={this.handleSuggestionClick} />
               : <Scanner onDetected={this.changeEan} />
             )
         }
