@@ -34,14 +34,26 @@ class App extends Component {
   };
 
   changeEan = (result) => {
+
+    /*
+    const isValidEan = (ean) => {
+      const eanArray = ean.split('');
+      const checkDigit = Number(eanArray.pop());
+      const eanSum = eanArray.reduce((p, v, i) => (
+        i % 2 === 0 ? Number(p) + Number(v) : Number(p) + 3 * Number(v)
+      ));
+      const checkSum = (10 - (eanSum % 10)) % 10;
+      return checkDigit === checkSum;
+    */
+
     const ean = result.codeResult.code;
-    if (!ean) {
+
+    if (!ean || ean.startsWith('0')) {
       console.log('Invalid EAN!')
     } else {
       this.props.history.push(`/product/${ean}`)
     }
   }
-
 
   addToCart = (newProd) => {
     const cart = this.state.cart.concat([newProd]);

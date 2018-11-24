@@ -12,8 +12,8 @@ export default class Scanner extends React.Component {
         inputStream: {
           type: 'LiveStream',
           constraints: {
-            width: 400,
-            height: 400,
+            width: window.innerWidth,
+            height: 300,
             facingMode: 'environment'
           }
         },
@@ -25,7 +25,7 @@ export default class Scanner extends React.Component {
         decoder: {
           readers: ['ean_reader']
         },
-        locate: false
+        locate: true,
       },
       function(err) {
         if (err) {
