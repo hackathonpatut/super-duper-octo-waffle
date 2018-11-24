@@ -20,20 +20,24 @@ body {
   left: 0;
   right: 0;
   background: #000;
+  overflow: hidden;
 }
 
 #interactive {
   position: absolute;
-  top: 64px;
-  height: 300px;
   margin: auto;
   text-align: center;
+}
+
+.drawingBuffer {
+  position: absolute;
 }
 
 #interactive::before {
   content: 'SCAN BARCODE';
   position: absolute;
   top: 50%;
+  margin-top: -25%;
   left: 15%;
   width: 70%;
   z-index: 10;
