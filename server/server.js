@@ -267,7 +267,7 @@ router.get(
                     i.ean !== parsed.ean
                 ),
                 ['sustainability.score', 'popularity'],
-                ['asc', 'desc']
+                ['desc', 'desc']
               ).slice(0, 5),
 
               health: _.orderBy(
