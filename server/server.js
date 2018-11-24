@@ -29,6 +29,15 @@ const SHOP_CODE = 'C609';
 // category / subcategory / segment
 const MATCHING_LEVEL = 'subcategory';
 
+const MIN_HEALTH = -10017;
+const MAX_HEALTH = 88.1;
+const MIN_SUSTAINABILITY = 0;
+const MAX_SUSTAINABILITY = 16892;
+
+const scaleHealth = value => (value - MIN_HEALTH) / (MAX_HEALTH - MIN_HEALTH);
+const scaleSustainability = value =>
+  1 - (value - MIN_SUSTAINABILITY) / (MAX_SUSTAINABILITY - MIN_SUSTAINABILITY);
+
 const headers = {
   'Content-Type': 'application/json',
   'Ocp-Apim-Subscription-Key': process.env.API_KEY
@@ -171,11 +180,14 @@ const parseProductInfo = async (info, ean) => {
       response.sustainability.marks = Object.keys(
         info.attributes.TX_YMPMER.value
       ).length;
-      response.sustainability.score =
-        (1 / response.sustainability.marks) * response.sustainability.distance;
+      response.sustainability.score = scaleSustainability(
+        (1 / response.sustainability.marks) * response.sustainability.distance
+      );
     } else {
       response.sustainability.marks = 0;
-      response.sustainability.score = response.sustainability.distance;
+      response.sustainability.score = scaleSustainability(
+        response.sustainability.distance
+      );
     }
   }
 
@@ -205,7 +217,7 @@ const parseProductInfo = async (info, ean) => {
     response.health.carbohydrates = info.attributes.HIHYDR.value.value;
   }
 
-  response.health.score = calculateHealthScore(response).toFixed(1);
+  response.health.score = scaleHealth(calculateHealthScore(response));
 
   const priceDataRaw = await getProductPrice(ean);
   const priceData = parseProductPrice(JSON.parse(priceDataRaw));
