@@ -12,7 +12,7 @@ import Review from './components/Review';
 
 const Header = () => <Menu fixed='top' inverted>
   <Menu.Item header>
-    K-SCANNER
+    EASIER
   </Menu.Item>
   <Menu.Item style={{ position: 'absolute', right: -5, top: -5 }}>
     <Link to='/'>
