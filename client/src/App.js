@@ -9,14 +9,9 @@ import Cart from './components/Cart';
 
 const Header = () => <Menu fixed='top' inverted>
   <Menu.Item header>
-    Super scanner
+    K-SCANNER
   </Menu.Item>
-  <Menu.Item>
-    <Link to='/cart'>
-      List
-    </Link>
-  </Menu.Item>
-  <Menu.Item>
+  <Menu.Item style={{ position: 'absolute', right: -5, top: -5 }}>
     <Link to='/'>
       <Icon className="barcode" name='barcode' size='large' />
     </Link>
@@ -34,18 +29,6 @@ class App extends Component {
   };
 
   changeEan = (result) => {
-
-    /*
-    const isValidEan = (ean) => {
-      const eanArray = ean.split('');
-      const checkDigit = Number(eanArray.pop());
-      const eanSum = eanArray.reduce((p, v, i) => (
-        i % 2 === 0 ? Number(p) + Number(v) : Number(p) + 3 * Number(v)
-      ));
-      const checkSum = (10 - (eanSum % 10)) % 10;
-      return checkDigit === checkSum;
-    */
-
     const ean = result.codeResult.code;
 
     if (!ean || ean.startsWith('0')) {
@@ -88,11 +71,6 @@ class App extends Component {
             }
           />
         </Switch>
-        <div style={{ marginTop: 400 }}>
-          <Button onClick={() => this.changeEan({ codeResult: { code: '8717775818090' }})}>ES</Button>
-          <Button onClick={() => this.changeEan({ codeResult: { code: '6410405060457' }})}>Tomaatti</Button>
-          <Button onClick={() => this.changeEan({ codeResult: { code: '6420256014004' }})}>Purkka</Button>
-        </div>
       </div>
     );
   }

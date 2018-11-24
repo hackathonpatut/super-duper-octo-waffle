@@ -152,10 +152,10 @@ class Product extends Component {
         <Divider />
           <div className="progress-wrapper">
           <div className="progress">
-            <Progress value={this.state.health.score} type='health' />
+            <Progress value={Math.ceil(this.state.health * 100)} type='health' />
           </div>
           <div className="progress">
-            <Progress value={this.state.sustainability.score} type='green' />
+            <Progress value={Math.ceil(this.state.sustainability * 100)} type='green' />
           </div>
         </div>
         <Button style={{ marginTop: '1em' }} color='blue' className="check-options" basic onClick={() => this.toggleAlternatives()}>
