@@ -16,13 +16,13 @@ export default class Product extends Component {
     axios
       .get(`/product/${ean}`)
       .then(response => {
-        if (response.data.code == -1) {
+        if (response.data.code === -1) {
           // 404
           this.setState({ code: -1 });
         } else {
           console.log(response);
           const { name, price, segment } = response.data;
-          this.setState({ code: ean, name, price });
+          this.setState({ code: ean, name, price: price.value });
         }
       })
       .catch(err => {
