@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Card, Button, Icon } from 'semantic-ui-react';
+import Progress from '../Progress';
 
 export default class CartOverview extends Component {
   render() {
@@ -7,7 +8,13 @@ export default class CartOverview extends Component {
       <Card.Group className="cart-overview">
         <Card>
           <Card.Content>
-            <Card.Header>Cart total: 12,34 €</Card.Header>
+            <div className="progress">
+              <Progress value={80} type='health' />
+            </div>
+            <div className="progress">
+              <Progress value={40} type='sustainable' />
+            </div>
+            <Card.Header>Cart total: <span>12,34 €</span></Card.Header>
           </Card.Content>
           <Card.Content extra>
               <Button color='standard' icon labelPosition='right'>
