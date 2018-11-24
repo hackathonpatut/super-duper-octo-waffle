@@ -141,7 +141,7 @@ class Product extends Component {
       <div className="product-info">
         <div className="product-header">
           <div className="image-wrapper">
-            <img src={`${this.state.image || "http://placehold.it/200x200"}`} />
+            <img src={`${this.state.image || "http://placehold.it/200x200"}`} alt='' />
           </div>
           <div className="product-meta">
             <h3>{this.state.name}</h3>
@@ -152,10 +152,10 @@ class Product extends Component {
         <Divider />
           <div className="progress-wrapper">
           <div className="progress">
-            <Progress value={80} type='health' />
+            <Progress value={this.state.health.score} type='health' />
           </div>
           <div className="progress">
-            <Progress value={80} type='green' />
+            <Progress value={this.state.sustainability.score} type='green' />
           </div>
         </div>
         <Button style={{ marginTop: '1em' }} className="check-options" basic onClick={() => this.toggleAlternatives()}>
