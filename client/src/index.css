@@ -10,7 +10,7 @@ body {
 }
 
 #interactive {
-  margin-top: 84px;
+  margin-top: 60px;
 }
 
 #scanner-view {
@@ -23,7 +23,7 @@ body {
 }
 
 .product-card {
-  margin-top: 84px;
+  margin-top: 60px;
 }
 
 .product-card > .ui.card {
@@ -38,11 +38,24 @@ body {
   margin-top: 10px;
 }
 
+.product-card .item {
+  margin-bottom: 5px;
+  display: flex !important;
+}
+
 .infotext {
   display: flex;
   justify-content: space-between;
 }
 
+.choiceInfo {
+  font-size: 80%;
+}
+
 .statistics {
   justify-content: space-around;
+}
+
+.avatar-image {
+  border-radius: 0 !important;
 }
