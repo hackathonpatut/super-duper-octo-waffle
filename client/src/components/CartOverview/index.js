@@ -9,7 +9,7 @@ export default class CartOverview extends Component {
     const totalPrice = items.reduce((p, v) => p + v.amount * v.price, 0).toFixed(2);
 
     return (
-      <Card.Group className="cart-overview">
+      <Card.Group className={`cart-overview ${(totalPrice < 0.01 ? 'hidden' : '')}`}>
         <Card>
           <Card.Content>
             <div className="progress">

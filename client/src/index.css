@@ -27,7 +27,12 @@ body {
   right: 0;
   z-index: 10;
   text-align: right;
+  transition: all 0.35s ease-in-out;
 }
+
+  .cart-overview.hidden {
+    bottom: -170px;
+  }
 
 .cart-overview .ui.card {
   width: 100%;
