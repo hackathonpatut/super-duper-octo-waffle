@@ -19,6 +19,7 @@ class Product extends Component {
     sustainabilityChoices: [],
     healthChoices: [],
     isChoicesVisible: false,
+    selectedAmount: 1,
   };
 
   getData = (ean) => {
@@ -120,6 +121,11 @@ class Product extends Component {
     })
   }
 
+  editAmount = (num) => {
+    const newAmount = Math.max(1, num + this.state.selectedAmount);
+    this.setState({ selectedAmount: newAmount });
+  }
+
   render() {
     if (this.state.code === -1) return <p>Product not found</p>;
     if (this.state.code === null) return (
@@ -129,8 +135,6 @@ class Product extends Component {
         </Dimmer>
       </div>
     );
-
-    const ean = this.props.match.params.ean;
 
     return (
       <div className="product-info">
@@ -189,11 +193,11 @@ class Product extends Component {
         }
         <div className="product-button-row">
           <Button.Group>
-            <Button icon>
+            <Button icon onClick={() => this.editAmount(-1)}>
               <Icon name='minus' />
             </Button>
-            <Button disabled>1</Button>
-            <Button icon>
+            <Button disabled>{this.state.selectedAmount}</Button>
+            <Button icon onClick={() => this.editAmount(1)}>
               <Icon name='plus' />
             </Button>
           </Button.Group>
