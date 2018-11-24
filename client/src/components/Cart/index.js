@@ -16,7 +16,7 @@ export default class Cart extends Component {
           {sortedList.map(item => (
             <List.Item key={item.name} className="suggestion-list-item" style={{ paddingTop: '10px', paddingBottom: '10px' }}>
                <div className="suggestion-image" style={{ alignSelf: 'center' }}>
-                <img style={{ width: 'auto', height: '100%' }} src={`${item.image || "http://placehold.it/200x200"}`} />
+                <img style={{ width: 'auto', height: '100%' }} src={`${item.image || "http://placehold.it/200x200"}`} alt='' />
               </div>
               <div style={{ fontSize: '16px', alignSelf: 'center', marginRight: '20px' }}>
                 X{item.amount}
