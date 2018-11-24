@@ -1,11 +1,12 @@
 import React from 'react';
 import { Flag, List } from 'semantic-ui-react';
+import Progress from '../Progress';
 
 const SuggestionList = ({
   title,
   data,
-  colorMapper,
   handleItemClick,
+  type,
 }) => (
   <React.Fragment>
     <h4 className="suggestion-title">{title}</h4>
@@ -19,7 +20,9 @@ const SuggestionList = ({
             <List.Content style={{ flexGrow: 1, alignSelf: 'center' }}>
               <List.Header as='a' style={{ display: 'flex', justifyContent: 'space-between'}}>
                 <span>{choice.name}</span>
-                <span style={{color: colorMapper(choice.score), paddingLeft: '10px'}}>{choice.score}</span>
+                <span style={{ paddingLeft: 10, width: 30, float: 'right' }}>
+                  <Progress value={Math.round(choice.score * 100)} hideText={true} type={type} />
+                </span>
               </List.Header>
               <List.Description>
                 <span className="choiceInfo">

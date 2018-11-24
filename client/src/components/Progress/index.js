@@ -10,10 +10,12 @@ export default class Progress extends Component {
     const color = (type === 'health' ? '#6435c9' : '#21ba45');
     const text = (type === 'health' ? 'Health' : 'Green');
 
+    const hideText = this.props.hideText || false;
+
     return (
       <CircularProgressbar
         percentage={value}
-        text={text}
+        text={(hideText ? null : text)}
         initialAnimation={true}
         styles={{
           path: { stroke: color },

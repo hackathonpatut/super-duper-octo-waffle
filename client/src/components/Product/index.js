@@ -173,6 +173,7 @@ class Product extends Component {
           <React.Fragment>
             {this.state.sustainabilityChoices && this.state.sustainabilityChoices.length > 0 &&
               <SuggestionList
+                type="sustainability"
                 title="Be more sustainable!"
                 data={this.state.sustainabilityChoices}
                 colorMapper={this.distanceToColor}
@@ -181,6 +182,7 @@ class Product extends Component {
             }
             {this.state.healthChoices && this.state.healthChoices.length > 0 &&
               <SuggestionList
+                type="health"
                 title="Be more healthy!"
                 data={this.state.healthChoices}
                 colorMapper={this.healthToColor}
