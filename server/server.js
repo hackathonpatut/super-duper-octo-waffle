@@ -68,7 +68,7 @@ const getProductInfo = ean => {
       },
       function(error, response, body) {
         if (error || response.statusCode !== 200) {
-          reject(error.message || 'Request failed!');
+          reject(error || 'Request failed!');
         }
         resolve(body);
       }
