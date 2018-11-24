@@ -13,7 +13,7 @@ export default class Scanner extends React.Component {
           type: 'LiveStream',
           constraints: {
             width: window.innerWidth,
-            height: window.innerHeight,
+            height: 300,
             facingMode: 'environment'
           }
         },

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Card, Image, Dimmer, Loader, Statistic, Divider } from 'semantic-ui-react';
+import { Flag, Button, Dimmer, Loader, Divider, Icon, Dropdown } from 'semantic-ui-react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import SuggestionList from './SuggestionList';
@@ -18,6 +18,8 @@ class Product extends Component {
     },
     sustainabilityChoices: [],
     healthChoices: [],
+    isChoicesVisible: false,
+    selectedAmount: 1,
   };
 
   getData = (ean) => {
@@ -40,7 +42,7 @@ class Product extends Component {
               id: product.origin.id,
             },
             price: product.price.value,
-            score: product.distance, // FIXME:
+            score: product.sustainability.score,
           })).filter(p => p.ean !== ean).slice(0, Math.min(matching.sustainability.length, 3));
 
           const healthChoices = matching.health.map(product => ({
@@ -52,7 +54,7 @@ class Product extends Component {
               id: product.origin.id,
             },
             price: product.price.value,
-            score: product.health.score, // FIXME:
+            score: product.health.score,
           })).filter(p => p.ean !== ean).slice(0, Math.min(matching.health.length, 3));
 
           this.setState({
@@ -62,7 +64,10 @@ class Product extends Component {
             image,
             sustainabilityChoices,
             healthChoices,
-            country: origin.country,
+            country: {
+              name: origin.country,
+              id: origin.id,
+            },
             sustainability: sustainability.score,
             health: health.score,
           });
@@ -110,67 +115,98 @@ class Product extends Component {
     this.props.handleSuggestionClick(ean);
   }
 
+  toggleAlternatives = () => {
+    this.setState({
+      isChoicesVisible: !this.state.isChoicesVisible,
+    })
+  }
+
+  editAmount = (num) => {
+    const newAmount = Math.max(1, num + this.state.selectedAmount);
+    this.setState({ selectedAmount: newAmount });
+  }
+
   render() {
     if (this.state.code === -1) return <p>Product not found</p>;
     if (this.state.code === null) return (
-      <div className="product-card">
-        <Card>
-          <div style={{minHeight: '300px'}}>
-            <Dimmer active inverted>
-              <Loader>Loading...</Loader>
-            </Dimmer>
-          </div>
-          <Card.Content>
-            <Card.Header>Loading...</Card.Header>
-          </Card.Content>
-        </Card>
+      <div className="loader">
+        <Dimmer active inverted>
+          <Loader>Loading...</Loader>
+        </Dimmer>
       </div>
     );
 
-    const ean = this.props.match.params.ean;
-
     return (
-      <div className="product-card">
-        <Card>
-          <Image size="small" centered src={`${this.state.image || "http://placehold.it/200x200"}`} />
-          <Card.Content>
-            <Card.Header>{this.state.name}</Card.Header>
-            <Card.Meta className="infotext">
-              <span>{`EAN: ${ean}` || 'EAN: XXX'}</span>
-              <span>{this.state.price} €</span>
-            </Card.Meta>
-            <Card.Meta>
-              <span>{`Origin: ${this.state.country}`}</span>
-            </Card.Meta>
-            <Card.Description>
-              <Statistic.Group size="small">
-                <Statistic color={this.distanceToColor(this.state.sustainability)}>
-                  <Statistic.Value>{this.state.sustainability}</Statistic.Value>
-                  <Statistic.Label>Sustainability</Statistic.Label>
-                </Statistic>
-                <Statistic color={this.healthToColor(this.state.health)}>
-                  <Statistic.Value>{this.state.health}</Statistic.Value>
-                  <Statistic.Label>Health</Statistic.Label>
-                </Statistic>
-              </Statistic.Group>
-              <Divider />
+      <div className="product-info">
+        <div className="product-header">
+          <div className="image-wrapper">
+            <img src={`${this.state.image || "http://placehold.it/200x200"}`} />
+          </div>
+          <div className="product-meta">
+            <h3>{this.state.name}</h3>
+            <span>Origin: <Flag name={this.state.country.id.toLowerCase()} />{this.state.country.name}</span>
+          </div>
+          <p className="product-price">{this.state.price}€</p>
+        </div>
+        <Divider />
+
+        {
+          /*
+          <Dropdown text='See alternative products' icon='like' floating labeled button className='icon'>
+            <Dropdown.Menu>
+              <Dropdown.Header icon='tree' content='More sustainable' />
+              <Dropdown.Item>Important</Dropdown.Item>
+              <Dropdown.Item>Announcement</Dropdown.Item>
+              <Dropdown.Item>Discussion</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Header icon='like' content='More healthy' />
+              <Dropdown.Item>Important</Dropdown.Item>
+              <Dropdown.Item>Announcement</Dropdown.Item>
+              <Dropdown.Item>Discussion</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          */
+        }
+
+        <Button className="check-options" secondary onClick={() => this.toggleAlternatives()}>
+          {`${this.state.isChoicesVisible ? 'Hide' : 'See'} alternative products`}
+        </Button>
+        {this.state.isChoicesVisible &&
+          <React.Fragment>
+            {this.state.sustainabilityChoices && this.state.sustainabilityChoices.length > 0 && 
               <SuggestionList
                 title="Be more sustainable!"
                 data={this.state.sustainabilityChoices}
                 colorMapper={this.distanceToColor}
                 handleItemClick={this.handleSuggestionClick}
               />
-              <Divider />
+            }
+            {this.state.healthChoices && this.state.healthChoices.length > 0 && 
               <SuggestionList
                 title="Be more healthy!"
                 data={this.state.healthChoices}
                 colorMapper={this.healthToColor}
                 handleItemClick={this.handleSuggestionClick}
               />
-            </Card.Description>
-          </Card.Content>
-        </Card>
-        <Button onClick={this.addToCart}>Lisää koriin</Button>
+            }
+          </React.Fragment>
+        }
+        <div className="product-button-row">
+          <Button.Group>
+            <Button icon onClick={() => this.editAmount(-1)}>
+              <Icon name='minus' />
+            </Button>
+            <Button disabled>{this.state.selectedAmount}</Button>
+            <Button icon onClick={() => this.editAmount(1)}>
+              <Icon name='plus' />
+            </Button>
+          </Button.Group>
+          <Button className="add-cart" primary icon labelPosition='right'>
+            Add to cart
+            <Icon name='cart plus' />
+          </Button>
+        </div>
+        <Divider />
       </div>
     );
   }
