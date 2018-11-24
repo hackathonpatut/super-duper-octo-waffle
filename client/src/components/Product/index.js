@@ -29,7 +29,7 @@ class Product extends Component {
           this.setState({ code: -1 });
         } else {
           console.log(response);
-          const { name, price, image, matching, origin, distance, health } = response.data;
+          const { name, price, image, matching, origin, sustainability, health } = response.data;
 
           const sustainabilityChoices = matching.sustainability.map(product => ({
             ean: product.ean,
@@ -63,7 +63,7 @@ class Product extends Component {
             sustainabilityChoices,
             healthChoices,
             country: origin.country,
-            sustainability: distance,
+            sustainability: sustainability.score,
             health: health.score,
           });
         }
