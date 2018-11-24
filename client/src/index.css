@@ -212,3 +212,15 @@ body {
 .info-button .icon {
   margin: 0 !important;
 }
+
+.mobilepay {
+  width: 120px;
+  margin: 0;
+  padding: 0;
+  margin-left: 10px !important;
+}
+
+.mobilepay button {
+  width: 100%;
+  height: 36px;
+}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Card, Button, Icon } from 'semantic-ui-react';
+import MobilePay from 'react-mobilepay'
 import Progress from '../Progress';
 
 export default withRouter(class CartOverview extends Component {
@@ -47,9 +48,13 @@ export default withRouter(class CartOverview extends Component {
                 View contents <Icon name='list ol' />
               </Button>
             }
-            <Button color='orange' icon labelPosition='right' onClick={this.goToCart} disabled={items.length === 0}>
-              Payment <Icon name='right arrow' />
-            </Button>
+            {!isCart ?
+              <Button color='orange' icon labelPosition='right' onClick={this.goToCart} disabled={items.length === 0}>
+                Payment <Icon name='right arrow' />
+              </Button>
+            : 
+              <MobilePay className="mobilepay" amount={totalPrice} currency={978} lang="en" size="large" color="blue" />
+            }
           </Card.Content>
         </Card>
       </Card.Group>
