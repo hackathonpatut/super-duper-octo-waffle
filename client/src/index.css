@@ -13,30 +13,40 @@ body {
   margin-bottom: 3rem;
 }
 
-#interactive {
+#scanner-bg {
   position: absolute;
-  top: 47px;
-  width: 100%;
-  height: 300px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #000;
 }
 
-  #interactive::before {
-    content: 'SCAN BARCODE';
-    position: absolute;
-    top: 50%;
-    left: 15%;
-    width: 70%;
-    z-index: 10;
-    display: block;
-    font-size: 30px;
-    line-height: 30px;
-    padding: 60px 0;
-    color: #fff;
-    font-weight: bold;
-    text-align: center;
-    border-top: 4px dashed #fff;
-    border-bottom: 4px dashed #fff;
-  }
+#interactive {
+  position: absolute;
+  top: 64px;
+  height: 300px;
+  margin: auto;
+  text-align: center;
+}
+
+#interactive::before {
+  content: 'SCAN BARCODE';
+  position: absolute;
+  top: 50%;
+  left: 15%;
+  width: 70%;
+  z-index: 10;
+  display: block;
+  font-size: 30px;
+  line-height: 30px;
+  padding: 60px 0;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  border-top: 4px dashed #fff;
+  border-bottom: 4px dashed #fff;
+}
 
 .cart-overview {
   position: fixed;
@@ -48,9 +58,9 @@ body {
   transition: all 0.35s ease-in-out;
 }
 
-  .cart-overview.hidden {
-    bottom: -170px;
-  }
+.cart-overview.hidden {
+  bottom: -200px;
+}
 
 .cart-overview .ui.card {
   width: 100%;

@@ -3,7 +3,7 @@ import Quagga from 'quagga';
 
 export default class Scanner extends React.Component {
   render() {
-    return <div id="interactive" className="viewport" />;
+    return <div id="scanner-bg"><div id="interactive" className="viewport" /></div>;
   }
 
   componentDidMount() {
@@ -12,8 +12,8 @@ export default class Scanner extends React.Component {
         inputStream: {
           type: 'LiveStream',
           constraints: {
-            width: (window.visualViewport ? window.visualViewport.width : window.innerWidth),
-            height: 400,
+            width: Math.min(400, window.innerWidth), //(window.visualViewport ? window.visualViewport.width : window.innerWidth),
+            height: Math.min(400, window.innerHeight),
             facingMode: 'environment'
           }
         },
