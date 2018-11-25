@@ -83,9 +83,9 @@ export default class Review extends Component {
           <List.Item>
             <List.Icon name='close' />
             <List.Content>
-              <List.Header>Sustainability info</List.Header>
+              <List.Header>Health info</List.Header>
               <List.Description>
-                {Math.round(((1-this.state.comparisons.sustainability) * 100))}% of others were more sustainable than you!
+                {Math.round(((1 - this.state.comparisons.health) * 100))}% made healthier choices than you!
               </List.Description>
             </List.Content>
           </List.Item>
@@ -121,9 +121,9 @@ export default class Review extends Component {
           <List.Item>
             <List.Icon name='check' />
             <List.Content>
-              <List.Header>Health info</List.Header>
+              <List.Header>Sustainability info</List.Header>
               <List.Description>
-                {Math.round(((1 - this.state.comparisons.health) * 100))}% made healthier choices than you!
+                {Math.round(((1-this.state.comparisons.sustainability) * 100))}% of others were more sustainable than you!
               </List.Description>
             </List.Content>
           </List.Item>

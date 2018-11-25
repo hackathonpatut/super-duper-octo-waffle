@@ -303,7 +303,7 @@ router.get(
 const getStats = async function(basketScores) {
   const client = new Client()
   client.connect();
-  const scores = await client.query('SELECT * FROM Baskets;');
+  const scores = await client.query('SELECT * FROM Baskets');
   await client.end();
 
   let healths = _.map(scores.rows, o => {
