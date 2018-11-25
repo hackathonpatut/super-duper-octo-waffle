@@ -29,6 +29,7 @@ export default withRouter(
         .toFixed(2);
 
       const isCart = location.pathname === '/cart';
+      const isReview = location.pathname === '/review';
 
       const totalInCart = items.reduce((p, v) => p + v.amount, 0);
       const totalHealth =
@@ -44,7 +45,7 @@ export default withRouter(
       return (
         <Card.Group
           className={`cart-overview ${
-            totalPrice < 0.01 && !isCart ? 'hidden' : ''
+            (totalPrice < 0.01 && !isCart) || isReview ? 'hidden' : ''
           }`}
         >
           <Card>
