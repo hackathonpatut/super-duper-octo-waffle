@@ -180,7 +180,7 @@ class Product extends Component {
           <div className="image-wrapper">
             <img src={`${this.state.image || "http://placehold.it/200x200"}`} alt='' />
           </div>
-          <div className="product-meta">
+          <div className="product-meta" style={{ background: 'white' }}>
             <h3>{this.state.name}</h3>
             <span>Origin: <Flag name={this.state.country.id.toLowerCase()} />{this.state.country.name}</span>
           </div>
