@@ -1,6 +1,6 @@
 import * as url from 'url';
 
-export function getRedisClient(REDIS_URL, expiration = 1200) {
+export function getRedisClient(REDIS_URL, expiration = 24000) {
   const redisUrl = url.parse(REDIS_URL);
   
   const client = require('express-redis-cache')({

@@ -14,6 +14,10 @@ export default withRouter(class CartOverview extends Component {
     this.props.history.goBack();
   }
 
+  goToReview = () => {
+    this.props.history.push(`/review`);
+  }
+
   render() {
 
     const { items, location } = this.props;
@@ -53,7 +57,9 @@ export default withRouter(class CartOverview extends Component {
                 Payment <Icon name='right arrow' />
               </Button>
             : 
-              <MobilePay className="mobilepay" amount={totalPrice} currency={978} lang="en" size="large" color="blue" />
+              <Button color='orange' icon labelPosition='right' onClick={this.goToReview} disabled={items.length === 0}>
+                Payment <Icon name='right arrow' />
+              </Button>
             }
           </Card.Content>
         </Card>

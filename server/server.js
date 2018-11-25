@@ -300,99 +300,53 @@ router.get(
   })
 );
 
-const getScore = async function(ean) {
-  const res = await client.query(
-    `SELECT health, sustainability FROM products WHERE ean = '` + ean + `';`
-  );
-  // If ean is not found, return median value
-  if (res.rowCount == 0) {
-    return {
-      health: 19.7,
-      sustainability: 433
-    };
-  } else {
-    const scores = _.map(res.rows, o => {
-      return {
-        health: scaleHealth(parseFloat(o.health)),
-        sustainability: scaleSustainability(parseFloat(o.sustainability))
-      };
-    });
-    return scores[0];
+const getStats = async function(basketScores) {
+  const client = new Client()
+  client.connect();
+  const scores = await client.query('SELECT * FROM Baskets;');
+  await client.end();
+
+  let healths = _.map(scores.rows, o => {
+    return scaleHealth(parseFloat(o.health));
+  });
+
+  healths = healths.sort();
+
+  let sustainability = _.map(scores.rows, o => {
+    return scaleSustainability(parseFloat(o.sustainability));
+  })
+
+  sustainability = sustainability.sort();
+
+  let healthIndex = healths.findIndex(element => {
+    return element > basketScores.health;
+  });
+
+  if (healthIndex === -1) {
+    healthIndex = scores.rowCount;
   }
-};
 
-app.post('/cart-comparison', cache.route(), (req, res) => {
-  client.connect();
-  const j = { name: 'binchen' };
-  const k = JSON.stringify(j); // '{"name":"binchen"}'
-  console.log(req.body);
-  const eans = req.body.eans;
-
-  getScore(eans[0]).then(result => {
-    console.log('mooikka moi');
-    console.log(result);
-  });
-  console.log(typeof eans);
-
-  client.query('SELECT * FROM Baskets limit 100;', (error, result) => {
-    //console.log(error ? error.stack : result) // Hello World!
-    var healths = _.map(result.rows, o => {
-      return scaleHealth(parseFloat(o.health));
-    });
-    healths = healths.sort();
-    //console.log(healths);
-    client.end();
+  let sustainabilityIndex = sustainability.findIndex(element => {
+    return element > basketScores.sustainability;
   });
 
-  const dummy_res = {
-    health: 0.75,
-    sustainability: 0.6
-  };
+  if (sustainabilityIndex === -1) {
+    sustainabilityIndex = scores.rowCount;
+  }
 
-  res.send(JSON.stringify(dummy_res));
-
-  //res.send(JSON.stringify(req.body));
-});
-
-/*
-{
-  sustainability-ranking: 0.25
-  sustainability-score: 0.25
-  heath-ranki
+  const basketRanking  = {
+    'health': healthIndex/scores.rowCount,
+    'sustainability': sustainabilityIndex/scores.rowCount
+  }
+  return basketRanking;
 }
-*/
-router.get('/cart-comparison', cache.route(), (err, res) => {
-  client.connect();
-  client.query('SELECT COUNT(*) FROM Products;', (error, result) => {
-    console.log(error ? error.stack : result); // Hello World!
-    client.end();
-  });
 
-  /*
-  await client.query(
-    'SELECT COUNT(*) FROM Products;'
-  );
-  */
-  /*
-  client.query('SELECT COUNT(*) FROM Products;', (err, res) => {
+app.post('/cart-comparison', asyncMiddleware(async (req, res) => {
+  const basketScores = req.body.data || req.body;
+  const scores = await getStats(basketScores);
+  return res.json(scores);
+}));
 
-  console.log(err ? err.stack : res.rows[0].message) // Hello World!
-})*/
-  res.send('res');
-});
-
-/*
-const res = await client.query(
-  'SELECT COUNT(*) FROM Products;''
-);
-
-
-client.connect()
-client.query('COUNT (*) FROM Products', (err, res) => {
-  console.log(err ? err.stack : res) // Hello World!
-  client.end()
-})
-*/
 app.use(router);
 
 app.use('/*', staticFiles);
