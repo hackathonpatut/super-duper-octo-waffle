@@ -149,10 +149,10 @@ class Product extends Component {
 
   render() {
     if (this.state.code === -1) {
-      toast.error("Invalid EAN!", {
-        position: toast.POSITION.TOP_RIGHT
-      });
-      this.navigateToStart();
+      // toast.error("Invalid EAN!", {
+      //   position: toast.POSITION.TOP_RIGHT
+      // });
+      // this.navigateToStart();
       return null;
     }
 
@@ -184,7 +184,7 @@ class Product extends Component {
             <h3>{this.state.name}</h3>
             <span>Origin: <Flag name={this.state.country.id.toLowerCase()} />{this.state.country.name}</span>
           </div>
-          <p className="product-price">{this.state.price}€</p>
+          <p className="product-price">{this.state.price > 0 ? this.state.price : '?'} €</p>
         </div>
         <Divider />
           <div className="progress-wrapper">
