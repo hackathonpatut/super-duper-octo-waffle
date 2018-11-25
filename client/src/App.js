@@ -88,7 +88,7 @@ class App extends Component {
               />
             }
           />
-          <Route path='/review' render={() => <Review />}/>
+          <Route path='/review' render={() => <Review items={this.state.cart} />}/>
           <Route path='/product/:ean' render={
             () =>
               <Product

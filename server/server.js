@@ -303,25 +303,36 @@ router.get(
 const getStats = async function(basketScores) {
   const client = new Client()
   client.connect();
-  const scores = await client.query('SELECT * FROM Baskets limit 100;');
+  const scores = await client.query('SELECT * FROM Baskets;');
   await client.end();
-  var healths = _.map(scores.rows, o => {
+
+  let healths = _.map(scores.rows, o => {
     return scaleHealth(parseFloat(o.health));
   });
+
   healths = healths.sort();
 
-  var sustainability = _.map(scores.rows, o => {
+  let sustainability = _.map(scores.rows, o => {
     return scaleSustainability(parseFloat(o.sustainability));
   })
+
   sustainability = sustainability.sort();
 
-  const healthIndex = healths.findIndex(element => {
+  let healthIndex = healths.findIndex(element => {
     return element > basketScores.health;
   });
 
-  const sustainabilityIndex = sustainability.findIndex(element => {
+  if (healthIndex === -1) {
+    healthIndex = scores.rowCount;
+  }
+
+  let sustainabilityIndex = sustainability.findIndex(element => {
     return element > basketScores.sustainability;
   });
+
+  if (sustainabilityIndex === -1) {
+    sustainabilityIndex = scores.rowCount;
+  }
 
   const basketRanking  = {
     'health': healthIndex/scores.rowCount,
@@ -330,12 +341,11 @@ const getStats = async function(basketScores) {
   return basketRanking;
 }
 
-app.post('/cart-comparison', cache.route(), (req, res) => {
-  const basketScores = req.body;
-  getStats(basketScores).then(scores => {
-    res.send(JSON.stringify(scores))
-  });
-});
+app.post('/cart-comparison', asyncMiddleware(async (req, res) => {
+  const basketScores = req.body.data || req.body;
+  const scores = await getStats(basketScores);
+  return res.json(scores);
+}));
 
 app.use(router);
 
