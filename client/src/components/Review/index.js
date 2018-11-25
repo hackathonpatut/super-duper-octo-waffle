@@ -7,8 +7,8 @@ export default class Review extends Component {
 
   state = {
     comparisons: {
-      health: Math.random(),
-      sustainability: Math.random(),
+      health: 0,
+      sustainability: 0,
     },
     isMobilePay: true,
   }
@@ -22,6 +22,10 @@ export default class Review extends Component {
     this.setState({
       totalHealth,
       totalSustainability,
+      comparisons: {
+        health: Math.max(totalHealth - 0.2, 0.05),
+        sustainability: Math.max(totalSustainability - 0.2, 0.05),
+      },
     });
 
     axios
@@ -34,12 +38,6 @@ export default class Review extends Component {
     .then(response => {
       if (response.data.code === -1) {
         console.log('Request failed');
-        this.setState({
-          comparisons: {
-            health: Math.random(),
-            sustainability: Math.random(),
-          }
-        });
       } else {
         console.log(response);
         this.setState({
@@ -51,12 +49,6 @@ export default class Review extends Component {
       }
     }).catch((err) => {
       console.log(err);
-      this.setState({
-        comparisons: {
-          health: Math.random(),
-          sustainability: Math.random(),
-        }
-      });
     });
   }
 
