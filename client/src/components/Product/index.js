@@ -149,10 +149,10 @@ class Product extends Component {
 
   render() {
     if (this.state.code === -1) {
-      toast.error("Invalid EAN!", {
-        position: toast.POSITION.TOP_RIGHT
-      });
-      this.navigateToStart();
+      // toast.error("Invalid EAN!", {
+      //   position: toast.POSITION.TOP_RIGHT
+      // });
+      // this.navigateToStart();
       return null;
     }
 
