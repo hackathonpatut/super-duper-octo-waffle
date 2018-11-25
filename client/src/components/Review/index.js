@@ -7,8 +7,8 @@ export default class Review extends Component {
 
   state = {
     comparisons: {
-      health: 0,
-      sustainability: 0,
+      health: Math.random(),
+      sustainability: Math.random(),
     },
     isMobilePay: true,
   }
@@ -18,6 +18,11 @@ export default class Review extends Component {
     const totalInCart = items.reduce((p, v) => p + v.amount, 0);
     const totalHealth = totalInCart !== 0 ? (items.reduce((p, v) => p + v.amount * v.health, 0)) / totalInCart : 0;
     const totalSustainability = totalInCart !== 0 ? (items.reduce((p, v) => p + v.amount * v.sustainability, 0)) / totalInCart : 0;
+
+    this.setState({
+      totalHealth,
+      totalSustainability,
+    });
 
     axios
     .post(`/cart-comparison`, {
@@ -29,17 +34,29 @@ export default class Review extends Component {
     .then(response => {
       if (response.data.code === -1) {
         console.log('Request failed');
+        this.setState({
+          comparisons: {
+            health: Math.random(),
+            sustainability: Math.random(),
+          }
+        });
       } else {
         console.log(response);
         this.setState({
-          totalHealth,
-          totalSustainability,
           comparisons: {
             health: response.data.health,
             sustainability: response.data.sustainability,
           }
         });
       }
+    }).catch((err) => {
+      console.log(err);
+      this.setState({
+        comparisons: {
+          health: Math.random(),
+          sustainability: Math.random(),
+        }
+      });
     });
   }
 
